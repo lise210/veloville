@@ -1,11 +1,4 @@
-# VéloVille — Plateforme de valorisation des données
-
-À compléter : présentation du projet, prérequis, installation, lancement de
-l'API et du front, exécution des tests, liens vers la documentation
-(docs/), auteur et version.
-
-
-# VéloVille — Projet Bloc 2
+# VéloVille — Projet Bloc 2 : Plateforme de valorisation des données
 
 Application de valorisation des données de VéloVille :
 fiabilisation des exports CSV, API sécurisée et restitution avec Streamlit.
@@ -22,14 +15,19 @@ La préparation de l’environnement est réalisée :
 - rôle et base PostgreSQL `veloville` créés, 
 - connexion SQLAlchemy configurée, 
 - test de connexion PostgreSQL réussi.
+- Tables station, trajet, incident et utilisateur créées avec leurs contraintes.
+- Index créés pour les filtres et les indicateurs.
+- Script sql/schema.sql exécuté deux fois sans erreur --> rejouable.
+- Comptes exploitant01 et direction01 chargés avec leurs rôles.
+- Droits de lecture, insertion et modification vérifiés pour le rôle PostgreSQL veloville sur les quatre tables.
 
-Les tables, l’import des données, les routes API, l’authentification et l’interface restent à développer.
+L’audit et l’import des données CSV, les routes API, l’authentification et l’interface restent à développer. Les contraintes du schéma ont été créées, mais leurs cas d’acceptation et de rejet restent à tester.
 
 ## Technologies et prérequis
 
 - Windows et PowerShell pour les commandes ci-dessous,
 - Python 3.14.7 utilisé pendant le développement,
-- PostgreSQL 14 ou supérieur, avec pgAdmin,
+- PostgreSQL 18 utilisé pendant le développement, avec pgAdmin.,
 - Git,
 - FastAPI, SQLAlchemy, Psycopg, Streamlit et pytest.
 
@@ -46,15 +44,11 @@ git clone https://github.com/lise210/veloville.git
 cd veloville
 ```
 
-Pendant la préparation de l’environnement, les changements se trouvent
-sur la branche suivante, avant leur fusion dans `main` :
+La préparation de l’environnement a été fusionnée dans main et identifiée par le tag v0.0.1.
 
-```powershell
-git switch configuration/environnement
-```
+Le schéma SQL est actuellement développé sur la branche fonctionnalite/schema-donnees, envoyée sur GitHub mais pas encore fusionnée dans main. 
 
-Toutes les commandes suivantes sont exécutées depuis la racine
-du projet, dans le dossier contenant `requirements.txt`.
+Toutes les commandes suivantes sont exécutées depuis la racine du projet, dans le dossier contenant `requirements.txt`.
 
 ## Préparer l’environnement Python
 
@@ -71,8 +65,7 @@ Installer les dépendances :
 python -m pip install -r requirements.txt
 ```
 
-Le dossier `.venv` est exclu de Git. Sur un autre ordinateur,
-il doit être recréé.
+Le dossier `.venv` est exclu de Git. Sur un autre ordinateur, il doit être recréé.
 
 ## Configurer les variables d’environnement
 
@@ -133,7 +126,32 @@ Dans `Databases` --> `Create` --> `Database` :
 - nom : `veloville` ;
 - propriétaire : `veloville`.
 
-La création des tables avec `sql/schema.sql` et le chargement des comptes avec `sql/comptes.sql` seront documentés lors de leur mise en place.
+### Créer les tables et charger les comptes
+
+Dans pgAdmin, ouvrir le Query Tool sur la base veloville
+avec le rôle veloville.
+
+1. Ouvrir et exécuter sql/schema.sql.
+2. Relancer le script : les tables et index existants sont conservés.
+3. Ouvrir et exécuter sql/comptes.sql.
+
+Vérifier les comptes :
+
+```sql
+SELECT id_utilisateur, username, role
+FROM utilisateur
+ORDER BY id_utilisateur;
+```
+
+Résultat attendu :
+
+|username|role|
+|---|---|
+|exploitant01|exploitant|
+|direction01|direction|
+
+
+La réexécution de schema.sql conserve les tables et les données grâce à IF NOT EXISTS. Elle ne met pas à jour la structure d’une table déjà existante.
 
 ## Vérifier la connexion PostgreSQL
 
@@ -185,10 +203,14 @@ tests/
 - Une pull request permet d’examiner les changements avant leur fusion.
 - Les versions identifiées dans le changelog sont associées à des tags.
 
-Branche de préparation : `configuration/environnement`.
 
-Le tag `v0.0.0` identifie le squelette initial fourni,
-au commit `123bdcb`.
+configuration/environnement : préparation terminée et fusionnée dans main par la pull request n°1.
+
+fonctionnalite/schema-donnees : création du schéma SQL et documentation en cours.
+
+Le tag `v0.0.0` identifie le squelette initial fourni, au commit `123bdcb`.
+
+Le tag `v0.0.1` identifie l’environnement configuré et la connexion PostgreSQL vérifiée, au commit de fusion 5f63809.
 
 Les fichiers `.env`, les environnements virtuels et les sauvegardes
 sont exclus du dépôt.
@@ -218,20 +240,40 @@ La commande `pip freeze > requirements.txt` a produit un fichier en UTF-16.
 
 Le fichier a été enregistré en UTF-8 avec VS Code, puis la correction a été commitée.
 
+### Tables créées avec le compte postgres
+
+Les tables ont initialement été créées avec le compte administrateur
+`postgres`. Le rôle applicatif `veloville` ne disposait donc pas des
+droits nécessaires sur ces tables.
+
+Leur propriété a été transférée avec les commandes suivantes,
+exécutées avec le compte administrateur :
+
+```sql
+ALTER TABLE public.station OWNER TO veloville;
+ALTER TABLE public.trajet OWNER TO veloville;
+ALTER TABLE public.incident OWNER TO veloville;
+ALTER TABLE public.utilisateur OWNER TO veloville;
+```
+
+Les droits `SELECT`, `INSERT` et `UPDATE` ont ensuite été vérifiés
+avec `has_table_privilege` : ils sont accordés sur les quatre tables.
+
+Pour une nouvelle installation, exécuter directement `schema.sql` avec le rôle `veloville`.
+
 ## Étapes restantes
 
-- audit des fichiers CSV ;
-- création du schéma SQL et chargement des comptes ;
-- fiabilisation et import idempotent ;
-- calcul des indicateurs ;
-- API REST, authentification JWT et contrôle des rôles ;
-- interface Streamlit tabulaire ;
-- tests métier, couverture et recette ;
-- sauvegarde et restauration ;
+- audit des fichiers CSV,
+- documentation du modèle de données et tests des contraintes SQL,
+- fiabilisation et import idempotent,
+- calcul des indicateurs,
+- API REST, authentification JWT et contrôle des rôles,
+- interface Streamlit,
+- sauvegarde et restauration,
+- tests métier, couverture et recette,
 - finalisation de la documentation et livraison.
 
-Les instructions de lancement de l’API et du front seront ajoutées
-après leur implémentation.
+Les instructions de lancement de l’API et du front seront ajoutées après leur implémentation.
 
 ## Auteur
 

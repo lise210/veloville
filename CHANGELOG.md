@@ -3,6 +3,17 @@
 Une section par version, avec les changements regroupés en
 « Ajouté », « Modifié », « Corrigé ».
 
+## [Non livré]
+
+### Ajouté
+- Tables station, trajet, incident et utilisateur avec leurs contraintes.
+- Index pour les filtres et les indicateurs.
+- Documentation du modèle de données et des règles RG1 à RG8.
+
+### Modifié
+- README complété avec la création des tables et le chargement des comptes.
+- Procédure de correction du propriétaire des tables documentée dans le README.md (avant : postgres. Après : veloville).
+
 ## [0.0.1] - 2026-10-13
 
 ### Ajouté
