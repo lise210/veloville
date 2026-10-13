@@ -186,7 +186,43 @@ Certaines sont écrites avec moins de cinq décimales : elles sont conservées, 
 
 ### trajets.csv
 
-Audit à réaliser.
+Le fichier contient 2 030 lignes et 8 colonnes.
+Les comptages ci-dessous portent sur le CSV brut, sauf indication contraire.
+
+| Défaut ou contrôle | Nombre de lignes concernées | Traitement retenu |
+|---|---:|---|
+| Répétitions de lignes identiques | 12 | Conserver une seule occurrence et journaliser les doublons écartés |
+| Identifiants encore répétés après retrait des doublons | 0 | Aucune correction nécessaire |
+| Durée nulle ou négative | 10 dans le CSV brut, 9 après retrait des doublons | Rejeter et journaliser |
+| Station de départ absente ou inconnue | 0 | Aucune correction nécessaire |
+| Station d’arrivée renseignée mais inconnue : S999 | 7 | Rejeter et journaliser, ne pas remplacer par NULL |
+| Station d’arrivée absente | 23 | Conserver avec NULL, conformément à RG3 |
+| Identifiant de trajet au mauvais format | 0 | Aucune correction nécessaire |
+| Identifiant de vélo avec un v minuscule | 6 | Passer en majuscules et journaliser la normalisation |
+| Identifiant de vélo encore invalide après passage en majuscules | 0 | Aucune autre correction nécessaire |
+| Type d’usager différent de abonne ou occasionnel | 0 | Aucune correction nécessaire |
+| Abonné sans pseudonyme | 0 | Aucune correction nécessaire |
+| Occasionnel avec un pseudonyme | 0 | Aucune correction nécessaire |
+| Pseudonyme renseigné au mauvais format | 0 | Aucune correction nécessaire |
+| Date de départ au format JJ/MM/AAAA HH:MM | 5 | Convertir au format attendu, avec secondes à 00, journaliser la normalisation |
+| Date impossible ou non reconnue après lecture des deux formats | 0 | Aucune |
+
+Après retrait des 12 doublons, il reste 2 018 lignes.
+Parmi elles, 16 présentent une durée invalide ou une station inconnue.
+Il reste donc 2 002 lignes après ces contrôles.
+
+Bilan prévisionnel :
+2 002 lignes conservées + 16 rejets + 12 doublons écartés = 2 030 lignes.
+
+Une ligne peut présenter plusieurs défauts. Les nombres de défauts
+ne doivent donc pas être additionnés pour calculer les rejets.
+
+Par exemple, T480152 possède une date au format français et une arrivée
+S999 : la date peut être corrigée, mais la ligne reste à rejeter
+pour sa station inconnue.
+
+Ces résultats sont des prévisions à confirmer lors de l’import.
+Aucun trajet n’a encore été chargé dans PostgreSQL.
 
 ### incidents.csv
 

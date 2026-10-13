@@ -9,6 +9,9 @@ Une section par version, avec les changements regroupés en
 - Tables station, trajet, incident et utilisateur avec leurs contraintes.
 - Index pour les filtres et les indicateurs.
 - Documentation du modèle de données et des règles RG1 à RG8.
+- Script d’audit des exports CSV.
+- Résultats de l’audit des stations dans docs/schema-donnees.md.
+- Résultats de l’audit des trajets dans docs/schema-donnees.md.
 
 ### Modifié
 - README complété avec la création des tables et le chargement des comptes.
