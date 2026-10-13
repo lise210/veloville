@@ -152,5 +152,42 @@ Les tests d’acceptation et de rejet des contraintes SQL restent à faire.
 
 ## 7. Audit des données
 
-À compléter après analyse des trois CSV :
-défauts identifiés, nombre de lignes concernées et traitement retenu.
+L’audit est réalisé avec `scripts/audit_donnees.py`,
+avant le chargement des CSV dans PostgreSQL.
+Les fichiers sources ne sont pas modifiés.
+
+### stations.csv
+
+Le fichier contient 120 lignes et 7 colonnes.
+
+| Contrôle réalisé | Nombre de lignes concernées | Traitement retenu |
+|---|---:|---|
+| Valeur manquante dans un champ obligatoire | 0 | Aucune correction nécessaire |
+| Ligne strictement identique à une précédente | 0 | Aucun doublon à écarter |
+| Identifiant de station répété | 0 | Aucune correction nécessaire |
+| Identifiant ne respectant pas S suivi de 3 chiffres | 0 | Aucune correction nécessaire |
+| Capacité non numérique, non entière ou non positive | 0 | Aucune correction nécessaire |
+| Date de mise en service impossible ou absente | 0 | Aucune correction nécessaire |
+| Date ne respectant pas le format AAAA-MM-JJ | 0 | Aucune correction nécessaire |
+| Latitude absente ou non numérique | 0 | Aucune correction nécessaire |
+| Longitude absente ou non numérique | 0 | Aucune correction nécessaire |
+| Nom vide ou composé uniquement d’espaces | 0 | Aucune correction nécessaire |
+| Commune vide ou composée uniquement d’espaces | 0 | Aucune correction nécessaire |
+| Nom dépassant 100 caractères | 0 | Aucune correction nécessaire |
+| Commune dépassant 100 caractères | 0 | Aucune correction nécessaire |
+| Latitude écrite avec moins de cinq décimales | 17 | Conserver. Stockage avec cinq décimales dans NUMERIC(8,5), sans changer la valeur |
+| Longitude écrite avec moins de cinq décimales | 11 | Conserver. Stockage avec cinq décimales dans NUMERIC(8,5), sans changer la valeur |
+| Latitude hors des limites -90 à 90 | 0 | Aucune correction nécessaire |
+| Longitude hors des limites -180 à 180 | 0 | Aucune correction nécessaire |
+
+Les coordonnées sont numériques et dans les limites géographiques.
+
+Certaines sont écrites avec moins de cinq décimales : elles sont conservées, car l’ajout de zéros ne change pas leur valeur.
+
+### trajets.csv
+
+Audit à réaliser.
+
+### incidents.csv
+
+Audit à réaliser.
