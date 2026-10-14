@@ -138,3 +138,12 @@ def normaliser_trajet_id(trajet_id):
     if re.fullmatch(r"T[0-9]{6}", trajet_id_normalise) is None:
         raise ValueError("Identifiant de trajet non reconnu")
     return trajet_id_normalise
+
+def normaliser_incident_id(incident_id):
+    """Normalise un identifiant d'incident et vérifie son format"""
+    texte = normaliser_texte_obligatoire(incident_id, 12)
+    incident_id_normalise = texte.upper()
+    if re.fullmatch(r"I2026-[0-9]{4}", incident_id_normalise) is None:
+        raise ValueError("Identifiant d'incident non reconnu")
+    return incident_id_normalise
+

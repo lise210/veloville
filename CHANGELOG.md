@@ -30,6 +30,8 @@ Une section par version, avec les changements regroupés en
 - Tests des identifiants de station valides, à normaliser et invalides.
 - Normalisation et contrôle du format des identifiants de trajet.
 - Tests des identifiants de trajet valides, à normaliser et invalides.
+- Normalisation et contrôle du format des identifiants d’incident.
+- Tests des identifiants d’incident valides, à normaliser et invalides.
 
 
 

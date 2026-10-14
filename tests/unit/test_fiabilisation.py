@@ -5,7 +5,7 @@
 
 import pytest
 
-from api.services.fiabilisation import normaliser_statut, normaliser_velo_id, convertir_entier_positif, convertir_date, convertir_horodatage, verifier_dates_incident, verifier_cible_incident, verifier_reference_station, normaliser_texte_facultatif, normaliser_texte_obligatoire, normaliser_station_id, normaliser_trajet_id
+from api.services.fiabilisation import normaliser_statut, normaliser_velo_id, convertir_entier_positif, convertir_date, convertir_horodatage, verifier_dates_incident, verifier_cible_incident, verifier_reference_station, normaliser_texte_facultatif, normaliser_texte_obligatoire, normaliser_station_id, normaliser_trajet_id, normaliser_incident_id
 from datetime import date, datetime
 
 
@@ -332,8 +332,31 @@ def test_trajet_id_vide():
     with pytest.raises(ValueError):
         normaliser_trajet_id("")
 
-###################################################Test sur normaliser_status###############################################################################
+###################################################Test sur normaliser_incident_id###############################################################################
+def test_incident_id_valide():
+    assert normaliser_incident_id("I2026-0001") == "I2026-0001"
 
+def test_incident_id_minuscules():
+    assert normaliser_incident_id("i2026-0001") == "I2026-0001"
+
+def test_incident_id_avec_espaces():
+    assert normaliser_incident_id(" I2026-0001 ") == "I2026-0001"
+
+def test_incident_id_mauvais_format():
+    with pytest.raises(ValueError):
+        normaliser_incident_id("I2026-001")
+
+def test_incident_id_trop_de_chiffres():
+    with pytest.raises(ValueError):
+        normaliser_incident_id("I2026-00001")
+
+def test_incident_id_absent():
+    with pytest.raises(ValueError):
+        normaliser_incident_id(None)
+
+def test_incident_id_vide():
+    with pytest.raises(ValueError):
+        normaliser_incident_id("")
 
 ###################################################Test sur normaliser_status###############################################################################
 
