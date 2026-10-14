@@ -5,7 +5,7 @@ connexion, réponse de connexion, corps de changement de statut, réponses
 des trois indicateurs.
 """
 
-from datetime import date
+from datetime import date, datetime
 from decimal import Decimal
 
 from pydantic import BaseModel, ConfigDict
@@ -40,3 +40,24 @@ class StationsPagineesResponse(BaseModel):
     page: int
     taille_page: int
     resultats: list[StationResponse]
+
+
+class TrajetResponse(BaseModel):
+    """Données d'un trajet renvoyées par l'API"""
+    model_config = ConfigDict(from_attributes=True)
+    trajet_id: str
+    velo_id: str
+    depart_horodatage: datetime
+    station_depart: str
+    station_arrivee: str | None
+    duree_secondes: int
+    type_usager: str
+    usager_ref: str | None
+
+
+class TrajetsPaginesResponse(BaseModel):
+    """Une page de trajets et ses informations de pagination"""
+    total: int
+    page: int
+    taille_page: int
+    resultats: list[TrajetResponse]

@@ -15,6 +15,11 @@ Une section par version, avec les changements regroupés en
 - Route GET /stations/{station_id}, accessible aux deux rôles authentifiés.
 - Tests des accès sans jeton, avec jeton invalide et avec les deux rôles.
 - Fixtures fournissant les jetons exploitant et direction.
+- Route GET /stations avec filtre par commune et pagination côté serveur.
+- Taille de page par défaut de 20, bornée entre 1 et 100.
+- Tests de pagination, du filtre par commune et du refus des paramètres hors limites.
+- Route GET /trajets protégée, avec pagination et filtres par dates et station de départ ou d’arrivée.
+- Tests de pagination par défaut, des filtres et du refus d’accès sans jeton.
 
 ## [0.0.4] - 2026-10-14
 

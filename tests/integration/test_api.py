@@ -167,3 +167,57 @@ def test_stations_taille_page_nulle(client, exploitant_token):
         headers={"Authorization": f"Bearer {exploitant_token}"})
 
     assert reponse.status_code == 422
+
+
+def test_trajets_pagination_par_defaut(client, exploitant_token):
+    """Vérifie la première page des trajets"""
+    reponse = client.get("/trajets",
+        headers={"Authorization": f"Bearer {exploitant_token}"})
+
+    assert reponse.status_code == 200
+    contenu = reponse.json()
+    assert contenu["total"] == 2002
+    assert contenu["page"] == 1
+    assert contenu["taille_page"] == 20
+    assert len(contenu["resultats"]) == 20
+
+    dates = [trajet["depart_horodatage"] for trajet in contenu["resultats"]]
+    assert dates == sorted(dates)
+
+
+def test_trajets_filtre_dates(client, exploitant_token):
+    """Vérifie le filtre sur la journée du 24 août 2026."""
+    reponse = client.get("/trajets",
+        params={
+            "date_debut": "2026-08-24",
+            "date_fin": "2026-08-24"},
+        headers={"Authorization": f"Bearer {exploitant_token}"})
+
+    assert reponse.status_code == 200
+    contenu = reponse.json()
+    assert contenu["total"] == 329
+    assert len(contenu["resultats"]) == 20
+    for trajet in contenu["resultats"]:
+        assert trajet["depart_horodatage"][:10] == "2026-08-24"
+
+
+def test_trajets_filtre_station(client, exploitant_token):
+    """Vérifie que la station est celle du départ ou de l'arrivée"""
+    reponse = client.get("/trajets",
+        params={"station": "S010", "taille_page": 100},
+        headers={"Authorization": f"Bearer {exploitant_token}"})
+
+    assert reponse.status_code == 200
+    contenu = reponse.json()
+    assert contenu["total"] > 0
+    assert len(contenu["resultats"]) > 0
+    for trajet in contenu["resultats"]:
+        assert (trajet["station_depart"] == "S010" or trajet["station_arrivee"] == "S010")
+
+
+def test_trajets_sans_token(client):
+    """Vérifie que les trajets ne sont pas accessibles sans connexion"""
+    reponse = client.get("/trajets")
+
+    assert reponse.status_code == 401
+    assert reponse.json() == {"detail": "Authentification requise"}
