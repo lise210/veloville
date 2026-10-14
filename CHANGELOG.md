@@ -3,6 +3,15 @@
 Une section par version, avec les changements regroupés en
 « Ajouté », « Modifié », « Corrigé ».
 
+## [Non livré]
+
+### Ajouté
+- Modèle ORM Utilisateur.
+- Vérification des mots de passe avec bcrypt et gestion des JWT.
+- Dépendances d’authentification et de contrôle des rôles.
+- Route POST /auth/login et schémas de connexion.
+- Application FastAPI et route GET /sante.
+
 ## [0.0.4] - 2026-10-14
 
 ### Ajouté

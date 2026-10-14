@@ -6,7 +6,7 @@
 from datetime import date, datetime
 from decimal import Decimal
 
-from sqlalchemy import String, Integer, Numeric, Date, DateTime, ForeignKey
+from sqlalchemy import String, Integer, Numeric, Date, DateTime, ForeignKey, Text
 from sqlalchemy.orm import Mapped, mapped_column
 
 from api.database import Base
@@ -46,3 +46,11 @@ class Incident(Base):
     statut: Mapped[str] = mapped_column(String(20))
     date_resolution: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     technicien: Mapped[str | None] = mapped_column(String(100), nullable=True)
+
+class Utilisateur(Base):
+    """Compte utilisateur de l'application"""
+    __tablename__ = "utilisateur"
+    id_utilisateur: Mapped[int] = mapped_column(Integer, primary_key=True)
+    username: Mapped[str] = mapped_column(String(100), unique=True)
+    mot_de_passe_hash: Mapped[str] = mapped_column(Text)
+    role: Mapped[str] = mapped_column(String(20))
