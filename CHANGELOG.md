@@ -34,7 +34,8 @@ Une section par version, avec les changements regroupés en
 - Tests des identifiants d’incident valides, à normaliser et invalides.
 - Normalisation et contrôle du type d’usager des trajets.
 - Tests des types abonne et occasionnel, des corrections et des valeurs refusées.
-
+- Contrôle du format des pseudonymes d’usager lorsqu’ils sont renseignés.
+- Tests des pseudonymes valides, absents et au mauvais format.
 
 
 ## [0.0.2] - 2026-10-14

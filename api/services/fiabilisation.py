@@ -155,3 +155,11 @@ def normaliser_type_usager(type_usager):
         raise ValueError("Type d'usager non reconnu")
     return type_normalise
 
+def normaliser_usager_ref(usager_ref):
+    """Vérifie le format d'un pseudonyme lorsqu'il est renseigné"""
+    texte = normaliser_texte_facultatif(usager_ref)
+    if texte is None:
+        return None
+    if re.fullmatch(r"U[0-9A-Fa-f]{8}", texte) is None:
+        raise ValueError("Pseudonyme d'usager non reconnu")
+    return texte
