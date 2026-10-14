@@ -3,7 +3,7 @@
 Une section par version, avec les changements regroupés en
 « Ajouté », « Modifié », « Corrigé ».
 
-## [Non livré]
+## [0.0.4] - 2026-10-14
 
 ### Ajouté
 - Indicateur d’activité par jour, calculé dans PostgreSQL avec SQLAlchemy.
