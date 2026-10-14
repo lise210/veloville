@@ -5,8 +5,10 @@
 
 import pytest
 
-from api.services.fiabilisation import normaliser_statut, normaliser_velo_id, convertir_entier_positif, convertir_date, convertir_horodatage, verifier_dates_incident, verifier_cible_incident, verifier_reference_station, normaliser_texte_facultatif, normaliser_texte_obligatoire, normaliser_station_id, normaliser_trajet_id, normaliser_incident_id, normaliser_type_usager, normaliser_usager_ref, verifier_usager_ref, verifier_technicien, verifier_type_incident
+from api.services.fiabilisation import normaliser_statut, normaliser_velo_id, convertir_entier_positif, convertir_date, convertir_horodatage, verifier_dates_incident, verifier_cible_incident, verifier_reference_station, normaliser_texte_facultatif, normaliser_texte_obligatoire, normaliser_station_id, normaliser_trajet_id, normaliser_incident_id, normaliser_type_usager, normaliser_usager_ref, verifier_usager_ref, verifier_technicien, verifier_type_incident, convertir_coordonnee
+
 from datetime import date, datetime
+from decimal import Decimal, InvalidOperation
 
 
 ###################################################Test sur normaliser_status###############################################################################
@@ -453,6 +455,52 @@ def test_type_incident_absent():
 def test_type_incident_vide():
     with pytest.raises(ValueError):
         verifier_type_incident("")
+
+###################################################Test sur convertir_coordonnee###############################################################################
+def test_coordonnee_valide():
+    assert convertir_coordonnee("50.59932", -90, 90) == Decimal("50.59932")
+
+def test_coordonnee_moins_de_decimales():
+    assert convertir_coordonnee("50.7205", -90, 90) == Decimal("50.7205")
+
+def test_coordonnee_avec_espaces():
+    assert convertir_coordonnee(" 3.105 ", -180, 180) == Decimal("3.105")
+
+def test_coordonnee_limite_minimum():
+    assert convertir_coordonnee("-90", -90, 90) == Decimal("-90")
+
+def test_coordonnee_limite_maximum():
+    assert convertir_coordonnee("90", -90, 90) == Decimal("90")
+
+def test_coordonnee_hors_limites():
+    with pytest.raises(ValueError):
+        convertir_coordonnee("91", -90, 90)
+
+def test_coordonnee_non_numerique():
+    with pytest.raises(ValueError):
+        convertir_coordonnee("latitude", -90, 90)
+
+def test_coordonnee_nan():
+    with pytest.raises(InvalidOperation):
+        convertir_coordonnee("NaN", -90, 90)
+
+def test_coordonnee_infinie():
+    with pytest.raises(ValueError):
+        convertir_coordonnee("Infinity", -90, 90)
+
+def test_coordonnee_absente():
+    with pytest.raises(ValueError):
+        convertir_coordonnee(None, -90, 90)
+
+###################################################Test sur normaliser_status###############################################################################
+
+
+###################################################Test sur normaliser_status###############################################################################
+
+
+
+###################################################Test sur normaliser_status###############################################################################
+
 
 ###################################################Test sur normaliser_status###############################################################################
 

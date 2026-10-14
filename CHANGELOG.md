@@ -42,8 +42,8 @@ Une section par version, avec les changements regroupés en
 - Tests des avertissements liés à l’absence de technicien.
 - Contrôle des catégories d’incident autorisées.
 - Tests des catégories valides, inconnues, absentes et vides.
-
-
+- Conversion des coordonnées des stations et contrôle des limites géographiques.
+- Tests des coordonnées valides, absentes, non numériques et hors limites.
 
 ## [0.0.2] - 2026-10-14
 

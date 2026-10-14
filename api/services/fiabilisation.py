@@ -10,6 +10,7 @@ couvertes par tests/unit/.
 
 import re
 from datetime import datetime
+from decimal import Decimal, InvalidOperation
 
 
 
@@ -197,3 +198,14 @@ def verifier_type_incident(type_incident):
     if texte not in types_autorises:
         raise ValueError("Type d'incident non reconnu")
     return texte
+
+def convertir_coordonnee(valeur, minimum, maximum):
+    """Convertit une coordonnée et vérifie ses limites"""
+    texte = normaliser_texte_obligatoire(valeur, 100)
+    try:
+        coordonnee = Decimal(texte)
+    except InvalidOperation:
+        raise ValueError("Coordonnée non numérique")
+    if coordonnee < minimum or coordonnee > maximum:
+        raise ValueError("Coordonnée hors limites")
+    return coordonnee
