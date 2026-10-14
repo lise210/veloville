@@ -163,3 +163,15 @@ def normaliser_usager_ref(usager_ref):
     if re.fullmatch(r"U[0-9A-Fa-f]{8}", texte) is None:
         raise ValueError("Pseudonyme d'usager non reconnu")
     return texte
+
+def verifier_usager_ref(type_usager, usager_ref):
+    """Vérifie la présence du pseudonyme selon le type d'usager"""
+    if type_usager == "occasionnel":
+        if usager_ref is not None:
+            raise ValueError("Un usager occasionnel ne doit pas avoir de pseudonyme")
+    elif type_usager == "abonne":
+        if usager_ref is None:
+            return "Pseudonyme absent pour un abonné"
+    else:
+        raise ValueError("Type d'usager non reconnu")
+    return None

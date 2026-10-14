@@ -5,7 +5,7 @@
 
 import pytest
 
-from api.services.fiabilisation import normaliser_statut, normaliser_velo_id, convertir_entier_positif, convertir_date, convertir_horodatage, verifier_dates_incident, verifier_cible_incident, verifier_reference_station, normaliser_texte_facultatif, normaliser_texte_obligatoire, normaliser_station_id, normaliser_trajet_id, normaliser_incident_id, normaliser_type_usager, normaliser_usager_ref
+from api.services.fiabilisation import normaliser_statut, normaliser_velo_id, convertir_entier_positif, convertir_date, convertir_horodatage, verifier_dates_incident, verifier_cible_incident, verifier_reference_station, normaliser_texte_facultatif, normaliser_texte_obligatoire, normaliser_station_id, normaliser_trajet_id, normaliser_incident_id, normaliser_type_usager, normaliser_usager_ref, verifier_usager_ref
 from datetime import date, datetime
 
 
@@ -401,9 +401,23 @@ def test_usager_ref_caractere_non_hexadecimal():
     with pytest.raises(ValueError):
         normaliser_usager_ref("U1234567G")
 
-###################################################Test sur normaliser_status###############################################################################
+###################################################Test sur verifier_usager_ref###############################################################################
+def test_abonne_avec_pseudonyme():
+    assert verifier_usager_ref("abonne", "Ued311b7d") is None
 
+def test_occasionnel_sans_pseudonyme():
+    assert verifier_usager_ref("occasionnel", None) is None
 
+def test_abonne_sans_pseudonyme():
+    assert verifier_usager_ref("abonne", None) == ("Pseudonyme absent pour un abonné")
+
+def test_occasionnel_avec_pseudonyme():
+    with pytest.raises(ValueError):
+        verifier_usager_ref("occasionnel", "Ued311b7d")
+
+def test_pseudonyme_type_usager_inconnu():
+    with pytest.raises(ValueError):
+        verifier_usager_ref("autre", None)
 
 ###################################################Test sur normaliser_status###############################################################################
 
