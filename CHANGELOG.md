@@ -3,6 +3,13 @@
 Une section par version, avec les changements regroupés en
 « Ajouté », « Modifié », « Corrigé ».
 
+## [Non livré]
+
+### Ajouté
+- Client HTTP centralisé avec jeton Bearer, délai maximal et messages d’erreur en français.
+- Gestion de la session Streamlit et formulaire de connexion.
+- Vérifications manuelles : connexion réussie, mauvais mot de passe et API arrêtée.
+
 ## [0.0.5] - 2026-10-15
 
 ### Ajouté
