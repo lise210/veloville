@@ -11,6 +11,7 @@ Une section par version, avec les changements regroupés en
 - Dépendances d’authentification et de contrôle des rôles.
 - Route POST /auth/login et schémas de connexion.
 - Application FastAPI et route GET /sante.
+- Fixture TestClient et cinq tests d’API : santé, connexion des deux rôles, refus d’un mauvais mot de passe et d’un compte inconnu.
 
 ## [0.0.4] - 2026-10-14
 
