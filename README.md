@@ -27,7 +27,10 @@ La préparation de l’environnement est réalisée :
 - Deux exécutions successives sans doublon supplémentaire.
 - Journal des doublons, rejets, normalisations et avertissements créé.
 
-Le calcul des indicateurs, les routes API, l’authentification et l’interface restent à développer. Plusieurs contraintes SQL ont été vérifiées manuellement. Les résultats sont dans docs/schema-donnees.md.
+Les trois indicateurs sont développés et vérifiés par des tests d’intégration :
+activité par jour, classement des stations actives et incidents par statut avec délai moyen de résolution.
+
+Les routes API, l’authentification et l’interface restent à développer. Les vérifications manuelles des contraintes SQL sont documentées dans docs/schema-donnees.md.
 
 ## Technologies et prérequis
 
@@ -209,7 +212,7 @@ Résultat obtenu pendant la préparation :
 ```
 
 Ce résultat concerne uniquement le test de connexion.
-Les tests de l’API et des indicateurs restent à développer.
+Les tests de l’API restent à développer.
 
 ## Tester les fonctions de fiabilisation
 
@@ -231,12 +234,11 @@ pytest --cov=api/services --cov-report=term-missing
 Cette commande exécute les tests et mesure la couverture. Le rapport indique également les lignes non exécutées.
 
 Résultat obtenu le 14/10/2026 :
-- 135 tests réussis : 134 tests de fiabilisation et 1 test de connexion
+- 142 tests réussis : 134 tests de fiabilisation et 1 test de connexion et 7 tests des indicateurs
 - fiabilisation.py : 157 instructions, aucune non exécutée, soit 100 % de couverture.
+- indicateurs.py : 39 instructions, couverture de 100 %.
 
-Les 100 % indiquent que toutes les instructions de fiabilisation.py ont été exécutées pendant les tests.
 
-Le module indicateurs.py est encore vide : son affichage à 100 % ne valide aucun calcul. La couverture sera mesurée à nouveau après le développement des indicateurs.
 
 ## Organisation du projet
 
@@ -248,7 +250,7 @@ api/
   schemas.py           Schémas de validation à développer
   securite.py          Sécurité à développer
   routers/             Routes API à développer
-  services/            Fiabilisation testée. Indicateurs à développer
+  services/            Fiabilisation et calcul des trois indicateurs
 
 data/                  Exports CSV fournis
 docs/                  Documentation et recette
@@ -274,13 +276,17 @@ configuration/environnement : préparation terminée et fusionnée dans main par
 
 fonctionnalite/schema-donnees : schéma et audit terminés, fusionnés dans main par la pull request n°2.
 
-fonctionnalite/import-donnees : fiabilisation et chargement des CSV, en cours avant fusion dans main.
+fonctionnalite/import-donnees : fiabilisation et chargement des CSV terminés, fusionnés dans main par la pull request n°3.
+
+fonctionnalite/indicateurs : développement des trois indicateurs en cours.
 
 Le tag `v0.0.0` identifie le squelette initial fourni, au commit `123bdcb`.
 
 Le tag `v0.0.1` identifie l’environnement configuré et la connexion PostgreSQL vérifiée, au commit de fusion 5f63809.
 
 Le tag `v0.0.2` identifie le schéma et l’audit des trois CSV.
+
+Le tag `v0.0.3` identifie la fiabilisation et l’import des données.
 
 Les fichiers `.env`, les environnements virtuels et les sauvegardes
 sont exclus du dépôt.
@@ -333,7 +339,6 @@ Pour une nouvelle installation, exécuter directement `schema.sql` avec le rôle
 
 ## Étapes restantes
 
-- calcul des indicateurs,
 - modèle ORM Utilisateur, API REST, authentification JWT et contrôle des rôles,
 - interface Streamlit,
 - sauvegarde et restauration,
