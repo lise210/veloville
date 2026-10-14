@@ -32,6 +32,8 @@ Une section par version, avec les changements regroupés en
 - Tests des identifiants de trajet valides, à normaliser et invalides.
 - Normalisation et contrôle du format des identifiants d’incident.
 - Tests des identifiants d’incident valides, à normaliser et invalides.
+- Normalisation et contrôle du type d’usager des trajets.
+- Tests des types abonne et occasionnel, des corrections et des valeurs refusées.
 
 
 

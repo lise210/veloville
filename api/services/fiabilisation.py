@@ -147,3 +147,11 @@ def normaliser_incident_id(incident_id):
         raise ValueError("Identifiant d'incident non reconnu")
     return incident_id_normalise
 
+def normaliser_type_usager(type_usager):
+    """Normalise le type d'usager et refuse les valeurs inconnues"""
+    texte = normaliser_texte_obligatoire(type_usager, 20)
+    type_normalise = texte.lower()
+    if type_normalise not in ["abonne", "occasionnel"]:
+        raise ValueError("Type d'usager non reconnu")
+    return type_normalise
+
