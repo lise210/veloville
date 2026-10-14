@@ -88,3 +88,33 @@ class IncidentsPaginesResponse(BaseModel):
 class ChangementStatutRequest(BaseModel):
     """Nouveau statut demandé pour un incident"""
     statut: str
+
+
+class ActiviteJourResponse(BaseModel):
+    jour: date
+    nb_trajets: int
+
+
+class ActiviteParJourResponse(BaseModel):
+    donnees: list[ActiviteJourResponse]
+
+
+class StationActiveResponse(BaseModel):
+    station_id: str
+    nom: str
+    nb_departs: int
+    nb_arrivees: int
+
+
+class StationsActivesResponse(BaseModel):
+    donnees: list[StationActiveResponse]
+
+
+class StatutIncidentsResponse(BaseModel):
+    statut: str
+    nb_incidents: int
+
+
+class IncidentsParStatutResponse(BaseModel):
+    donnees: list[StatutIncidentsResponse]
+    delai_moyen_resolution_heures: float | None

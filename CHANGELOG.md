@@ -26,6 +26,8 @@ Une section par version, avec les changements regroupés en
 - Route PUT /incidents/{`incident_id`}/statut réservée au rôle exploitant.
 - Contrôle des transitions autorisées et renseignement de la date de résolution.
 - Tests du refus de modification sans connexion (401) et avec le rôle direction (403).
+- Trois routes d’indicateurs protégées : activité par jour, stations actives et incidents par statut avec délai moyen de résolution.
+- Schémas de réponse et tests des trois routes sur les données importées.
 
 ## [0.0.4] - 2026-10-14
 

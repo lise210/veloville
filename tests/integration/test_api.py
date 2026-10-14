@@ -278,3 +278,44 @@ def test_modifier_statut_sans_token(client):
     assert reponse.status_code == 401
     assert reponse.json() == {"detail": "Authentification requise"}
 
+
+def test_indicateur_activite_par_jour(client, exploitant_token):
+    """Vérifie l'indicateur d'activité pour une journée"""
+    reponse = client.get("/indicateurs/activite-par-jour",
+        params={
+            "date_debut": "2026-08-24",
+            "date_fin": "2026-08-24"},
+        headers={"Authorization": f"Bearer {exploitant_token}"})
+
+    assert reponse.status_code == 200
+    assert reponse.json() == {"donnees": [{"jour": "2026-08-24", "nb_trajets": 329}]}
+
+
+def test_indicateur_stations_actives(client, direction_token):
+    """Vérifie le classement et l'accès du rôle direction"""
+    reponse = client.get("/indicateurs/stations-actives",
+        params={"limite": 3},
+        headers={"Authorization": f"Bearer {direction_token}"})
+
+    assert reponse.status_code == 200
+    donnees = reponse.json()["donnees"]
+    assert len(donnees) == 3
+    assert donnees[0]["station_id"] == "S094"
+    assert donnees[0]["nb_departs"] == 22
+    assert donnees[0]["nb_arrivees"] == 27
+    assert donnees[1]["station_id"] == "S027"
+    assert donnees[2]["station_id"] == "S062"
+
+
+def test_indicateur_incidents_par_statut(client, exploitant_token):
+    """Vérifie les comptages et le délai moyen via l'API"""
+    reponse = client.get("/indicateurs/incidents-par-statut",
+        headers={"Authorization": f"Bearer {exploitant_token}"})
+
+    assert reponse.status_code == 200
+    assert reponse.json() == {
+        "donnees": [
+            {"statut": "en_cours", "nb_incidents": 46},
+            {"statut": "ouvert", "nb_incidents": 55},
+            {"statut": "resolu", "nb_incidents": 76}],
+        "delai_moyen_resolution_heures": 129.4}
