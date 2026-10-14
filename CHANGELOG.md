@@ -12,6 +12,9 @@ Une section par version, avec les changements regroupés en
 - Route POST /auth/login et schémas de connexion.
 - Application FastAPI et route GET /sante.
 - Fixture TestClient et cinq tests d’API : santé, connexion des deux rôles, refus d’un mauvais mot de passe et d’un compte inconnu.
+- Route GET /stations/{station_id}, accessible aux deux rôles authentifiés.
+- Tests des accès sans jeton, avec jeton invalide et avec les deux rôles.
+- Fixtures fournissant les jetons exploitant et direction.
 
 ## [0.0.4] - 2026-10-14
 

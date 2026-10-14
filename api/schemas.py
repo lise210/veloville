@@ -5,8 +5,10 @@ connexion, réponse de connexion, corps de changement de statut, réponses
 des trois indicateurs.
 """
 
-from pydantic import BaseModel
+from datetime import date
+from decimal import Decimal
 
+from pydantic import BaseModel, ConfigDict
 
 class LoginRequest(BaseModel):
     """Identifiants envoyés pour se connecter"""
@@ -18,3 +20,15 @@ class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
     role: str
+
+
+class StationResponse(BaseModel):
+    """Données d'une station renvoyées par l'API"""
+    model_config = ConfigDict(from_attributes=True)
+    station_id: str
+    nom: str
+    commune: str
+    capacite: int
+    latitude: Decimal
+    longitude: Decimal
+    date_mise_en_service: date

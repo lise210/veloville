@@ -8,11 +8,12 @@ Lancement : uvicorn api.main:app --reload
 
 from fastapi import FastAPI
 
-from api.routers import auth
+from api.routers import auth, stations
 
 app = FastAPI(title="API VéloVille")
 
 app.include_router(auth.router)
+app.include_router(stations.router)
 
 @app.get("/sante")
 def sante():
