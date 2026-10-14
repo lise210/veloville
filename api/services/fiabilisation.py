@@ -74,3 +74,14 @@ def convertir_horodatage(valeur):
             #si échoue, passe au format suivant
             continue
     raise ValueError("Horodatage impossible ou format non reconnu")
+
+def verifier_dates_incident(statut, date_signalement, date_resolution):
+    """Vérifie les dates d'un incident selon son statut."""
+    if statut == "resolu":
+        if date_resolution is None:
+            raise ValueError("Incident résolu sans date de résolution")
+        if date_resolution < date_signalement:
+            raise ValueError("Résolution antérieure au signalement")
+    elif date_resolution is not None:
+        raise ValueError("Incident non résolu avec une date de résolution")
+    

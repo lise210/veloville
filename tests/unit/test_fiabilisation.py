@@ -5,7 +5,7 @@
 
 import pytest
 
-from api.services.fiabilisation import normaliser_statut, normaliser_velo_id, convertir_entier_positif, convertir_date, convertir_horodatage
+from api.services.fiabilisation import normaliser_statut, normaliser_velo_id, convertir_entier_positif, convertir_date, convertir_horodatage, verifier_dates_incident
 from datetime import date, datetime
 
 
@@ -134,9 +134,58 @@ def test_horodatage_vide():
     with pytest.raises(ValueError):
         convertir_horodatage("")
 
-###################################################Test sur normaliser_status###############################################################################
+###################################################Test sur verifier_dates_incident###############################################################################
+def test_incident_resolu_dates_valides():
+    verifier_dates_incident(
+        "resolu",
+        datetime(2026, 10, 14, 10, 0),
+        datetime(2026, 10, 14, 11, 0))
 
+def test_incident_resolu_dates_egales():
+    verifier_dates_incident(
+        "resolu",
+        datetime(2026, 10, 14, 10, 0),
+        datetime(2026, 10, 14, 10, 0))
 
+def test_incident_ouvert_sans_resolution():
+    verifier_dates_incident(
+        "ouvert",
+        datetime(2026, 10, 14, 10, 0),
+        None)
+
+def test_incident_en_cours_sans_resolution():
+    verifier_dates_incident(
+        "en_cours",
+        datetime(2026, 10, 14, 10, 0),
+        None)
+
+def test_incident_resolu_sans_resolution():
+    with pytest.raises(ValueError):
+        verifier_dates_incident(
+            "resolu",
+            datetime(2026, 10, 14, 10, 0),
+            None)
+
+def test_incident_resolution_avant_signalement():
+    with pytest.raises(ValueError):
+        verifier_dates_incident(
+            "resolu",
+            datetime(2026, 10, 14, 10, 0),
+            datetime(2026, 10, 14, 9, 0))
+
+def test_incident_ouvert_avec_resolution():
+    with pytest.raises(ValueError):
+        verifier_dates_incident(
+            "ouvert",
+            datetime(2026, 10, 14, 10, 0),
+            datetime(2026, 10, 14, 11, 0))
+
+def test_incident_en_cours_avec_resolution():
+    with pytest.raises(ValueError):
+        verifier_dates_incident(
+            "en_cours",
+            datetime(2026, 10, 14, 10, 0),
+            datetime(2026, 10, 14, 11, 0))
 
 ###################################################Test sur normaliser_status###############################################################################
 
