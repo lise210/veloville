@@ -3,6 +3,13 @@
 Une section par version, avec les changements regroupés en
 « Ajouté », « Modifié », « Corrigé ».
 
+## [Non livré]
+
+### Ajouté
+- Fonction de normalisation des statuts d’incident (normaliser_statut).
+- Tests unitaires des statuts valides, à normaliser, inconnus et absents.
+
+
 ## [0.0.2] - 2026-10-14
 
 ### Ajouté
