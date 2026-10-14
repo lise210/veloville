@@ -140,15 +140,32 @@ Les droits SELECT, INSERT et UPDATE du rôle veloville ont été vérifiés sur 
 
 ## 6. Vérifications réalisées
 
-- Première exécution du schéma : tables et index créés.
-- Seconde exécution : aucune erreur, éléments existants conservés.
-- Chargement des comptes : exploitant01 et direction01 présents avec les rôles attendus.
-- Permissions : lecture, insertion et modification accordées au rôle PostgreSQL veloville.
-- Test automatisé de connexion : 1 passed.
+| Vérification | Résultat obtenu |
+|---|---|
+| Première exécution de schema.sql | Tables et index créés |
+| Seconde exécution de schema.sql | Aucune erreur, éléments existants conservés |
+| Chargement des comptes | exploitant01 et direction01 présents avec les rôles attendus |
+| Permissions du rôle veloville | SELECT, INSERT et UPDATE accordés sur les quatre tables |
+| Test automatisé de connexion | 1 passed |
+| Station avec capacité 0 | Refusée par `station_capacite_check` |
+| Station avec capacité 15 | Acceptée |
+| Trajet avec station de départ inexistante | Refusé par `fk_trajet_station_depart` |
+| Trajet avec départ existant et arrivée NULL | Accepté |
+| Trajet avec durée 0 | Refusé par `trajet_duree_secondes_check` |
+| Incident visant un vélo et une station | Refusé par `ck_incident_cible` |
+| Incident ouvert visant uniquement un vélo, sans technicien | Accepté |
+| Résolution antérieure au signalement | Refusée par `ck_incident_resolution` |
+| Résolution égale au signalement | Acceptée |
+| Incident résolu sans date de résolution | Refusé par `ck_incident_resolution` |
+| Incident ouvert avec date de résolution | Refusé par `ck_incident_resolution` |
 
-CREATE TABLE IF NOT EXISTS rend la création rejouable, mais ne met pas à jour une table existante.
+Les insertions de vérification ont été exécutées dans des transactions annulées avec ROLLBACK : aucune donnée de test n’est conservée.
 
-Les tests d’acceptation et de rejet des contraintes SQL restent à faire.
+CREATE TABLE IF NOT EXISTS permet de relancer la création, mais ne modifie pas une table déjà existante.
+
+Ces vérifications couvrent les cas indiqués dans le tableau, pas toutes les contraintes du schéma.
+
+Les requêtes de vérification sont conservées dans `sql/verifications_schema.sql`. Chaque cas est exécuté séparément.
 
 ## 7. Audit des données
 

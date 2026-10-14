@@ -13,6 +13,9 @@ Une section par version, avec les changements regroupés en
 - Résultats de l’audit des stations dans docs/schema-donnees.md.
 - Résultats de l’audit des trajets dans docs/schema-donnees.md.
 - Résultats de l’audit des incidents dans docs/schema-donnees.md.
+- Conclusion de l'audit dans docs/schema-donnees.md.
+- Vérifications manuelles des contraintes SQL dans pgAdmin, avec résultats documentés dans schema-donnees.md et transactions annulées par ROLLBACK.
+- Requêtes de vérification du schéma gardées dans sql/verifications_schema.sql.
 
 ### Modifié
 - README complété avec la création des tables et le chargement des comptes.
