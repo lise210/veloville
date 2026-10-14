@@ -290,8 +290,13 @@ Bilan prévisionnel :
 Les normalisations et avertissements ne sont pas des rejets.
 Une ligne peut recevoir plusieurs messages dans le journal.
 
-Ces résultats seront confirmés lors de l’import.
-Aucun incident n’a encore été chargé dans PostgreSQL.
+Import des incidents vérifié :
+- 177 incidents présents après la première exécution 
+- 177 incidents après la seconde exécution, sans doublon 
+- 3 lignes rejetées pour une résolution antérieure au signalement.
+
+Bilan confirmé :
+177 incidents en base + 3 rejets + 0 doublon = 180 lignes.
 
 ### Conclusion de l’audit
 
@@ -307,7 +312,9 @@ Après application des traitements prévus, les volumes attendus sont :
 - 2 002 trajets ;
 - 177 incidents.
 
-Le volume des stations a été confirmé après deux exécutions de l’import.
-Les volumes des stations et trajets ont été confirmés après deux exécutions. 
+Les volumes ont été confirmés après deux exécutions de l’import :
+120 stations, 2 002 trajets et 177 incidents.
+La seconde exécution n’a créé aucun doublon.
 
-Le volume des incidents reste à vérifier après leur chargement.
+Le journal docs/journal_import.csv contient 192 messages :
+12 doublons, 19 rejets, 136 normalisations et 25 avertissements.

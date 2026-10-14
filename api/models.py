@@ -23,7 +23,7 @@ class Station(Base):
     date_mise_en_service: Mapped[date] = mapped_column(Date)
 
 class Trajet(Base):
-    """Trajet réalisé avec un vélo"""
+    """Trajet"""
     __tablename__ = "trajet"
     trajet_id: Mapped[str] = mapped_column(String(12), primary_key=True)
     velo_id: Mapped[str] = mapped_column(String(8))
@@ -33,3 +33,16 @@ class Trajet(Base):
     duree_secondes: Mapped[int] = mapped_column(Integer)
     type_usager: Mapped[str] = mapped_column(String(20))
     usager_ref: Mapped[str | None] = mapped_column(String(9), nullable=True)
+
+class Incident(Base):
+    """Incident"""
+    __tablename__ = "incident"
+    incident_id: Mapped[str] = mapped_column(String(12), primary_key=True)
+    date_signalement: Mapped[datetime] = mapped_column(DateTime)
+    cible: Mapped[str] = mapped_column(String(20))
+    velo_id: Mapped[str | None] = mapped_column(String(8), nullable=True)
+    station_id: Mapped[str | None] = mapped_column(String(10), ForeignKey("station.station_id"), nullable=True)
+    type_incident: Mapped[str] = mapped_column(String(100))
+    statut: Mapped[str] = mapped_column(String(20))
+    date_resolution: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    technicien: Mapped[str | None] = mapped_column(String(100), nullable=True)

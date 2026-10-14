@@ -61,6 +61,8 @@ Une section par version, avec les changements regroupés en
 - Vérification de deux chargements successifs : 120 stations, sans doublon.
 - Modèle ORM Trajet et chargement des trajets avec SQLAlchemy.
 - Vérification de deux chargements successifs : 2 002 trajets, sans doublon.
+- Modèle ORM Incident et chargement des incidents avec SQLAlchemy.
+- Vérification de deux chargements successifs des trois tables, sans doublon.
 
 
 ## [0.0.2] - 2026-10-14

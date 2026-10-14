@@ -17,7 +17,7 @@ from api.services.fiabilisation import separer_doublons, normaliser_station_id, 
 
 from sqlalchemy import select
 from api.database import SessionLocal
-from api.models import Station, Trajet
+from api.models import Station, Trajet, Incident
 
 def main() -> None:
     #keep_default_na=False : garde les champs vides comme ""
@@ -290,8 +290,23 @@ def main() -> None:
                     usager_ref=trajet["usager_ref"])
                 db.add(nouveau_trajet)
 
-        db.commit()
-    print("Chargement des stations et trajets terminé.")
+        for incident in incidents_valides:
+            incident_existant = db.scalar(select(Incident).where(Incident.incident_id == incident["incident_id"]))
+            if incident_existant is None:
+                nouvel_incident = Incident(
+                    incident_id=incident["incident_id"],
+                    date_signalement=incident["date_signalement"],
+                    cible=incident["cible"],
+                    velo_id=incident["velo_id"],
+                    station_id=incident["station_id"],
+                    type_incident=incident["type_incident"],
+                    statut=incident["statut"],
+                    date_resolution=incident["date_resolution"],
+                    technicien=incident["technicien"])
+                db.add(nouvel_incident)
 
+        db.commit()
+    print("Chargement des stations, trajets et incidents terminé.")
+    
 if __name__ == "__main__":
     main()
