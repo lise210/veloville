@@ -258,3 +258,23 @@ def test_incidents_sans_token(client):
 
     assert reponse.status_code == 401
     assert reponse.json() == {"detail": "Authentification requise"}
+
+
+def test_modifier_statut_direction_interdit(client, direction_token):
+    """Vérifie que la direction ne peut pas modifier un incident"""
+    reponse = client.put("/incidents/I2026-0001/statut",
+        json={"statut": "en_cours"},
+        headers={"Authorization": f"Bearer {direction_token}"})
+
+    assert reponse.status_code == 403
+    assert reponse.json() == {"detail": "Rôle non autorisé pour cette action"}
+
+
+def test_modifier_statut_sans_token(client):
+    """Vérifie qu'une modification exige une connexion"""
+    reponse = client.put("/incidents/I2026-0001/statut",
+        json={"statut": "en_cours"})
+
+    assert reponse.status_code == 401
+    assert reponse.json() == {"detail": "Authentification requise"}
+

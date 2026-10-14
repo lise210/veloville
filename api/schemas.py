@@ -83,3 +83,8 @@ class IncidentsPaginesResponse(BaseModel):
     page: int
     taille_page: int
     resultats: list[IncidentResponse]
+
+
+class ChangementStatutRequest(BaseModel):
+    """Nouveau statut demandé pour un incident"""
+    statut: str

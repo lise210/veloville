@@ -23,6 +23,9 @@ Une section par version, avec les changements regroupés en
 - Route GET /incidents protégée, avec filtre par statut et pagination.
 - Tri des incidents du plus récent au plus ancien.
 - Tests de pagination, du filtre par statut et du refus d’accès sans jeton.
+- Route PUT /incidents/{`incident_id`}/statut réservée au rôle exploitant.
+- Contrôle des transitions autorisées et renseignement de la date de résolution.
+- Tests du refus de modification sans connexion (401) et avec le rôle direction (403).
 
 ## [0.0.4] - 2026-10-14
 
