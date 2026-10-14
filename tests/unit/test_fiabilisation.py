@@ -5,7 +5,7 @@
 
 import pytest
 
-from api.services.fiabilisation import normaliser_statut, normaliser_velo_id, convertir_entier_positif, convertir_date, convertir_horodatage, verifier_dates_incident, verifier_cible_incident, verifier_reference_station
+from api.services.fiabilisation import normaliser_statut, normaliser_velo_id, convertir_entier_positif, convertir_date, convertir_horodatage, verifier_dates_incident, verifier_cible_incident, verifier_reference_station, normaliser_texte_facultatif
 from datetime import date, datetime
 
 
@@ -238,8 +238,36 @@ def test_reference_station_referentiel_vide():
     with pytest.raises(ValueError):
         verifier_reference_station("S001", [])
 
+###################################################Test sur normaliser_texte_facultatif###############################################################################
+def test_texte_facultatif_present():
+    assert normaliser_texte_facultatif("S001") == "S001"
+
+def test_texte_facultatif_avec_espaces():
+    assert normaliser_texte_facultatif(" S001 ") == "S001"
+
+def test_texte_facultatif_absent():
+    assert normaliser_texte_facultatif(None) is None
+
+def test_texte_facultatif_vide():
+    assert normaliser_texte_facultatif("") is None
+
+def test_texte_facultatif_uniquement_espaces():
+    assert normaliser_texte_facultatif("   ") is None
+
 ###################################################Test sur normaliser_status###############################################################################
 
+
+###################################################Test sur normaliser_status###############################################################################
+
+
+
+###################################################Test sur normaliser_status###############################################################################
+
+
+###################################################Test sur normaliser_status###############################################################################
+
+
+###################################################Test sur normaliser_status###############################################################################
 
 
 ###################################################Test sur normaliser_status###############################################################################

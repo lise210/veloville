@@ -97,8 +97,20 @@ def verifier_cible_incident(cible, velo_id, station_id):
         raise ValueError("Cible non reconnue")
 
 def verifier_reference_station(station_id, stations_connues):
-    """Vérifie qu'une station renseignée existe dans le référentiel"""
+    """Vérifie qu'une station renseignée existe dans le référentiel
+    une arrivée absente reste autorisée"""
     if station_id is None:
         raise ValueError("Référence de station absente")
     if station_id not in stations_connues:
         raise ValueError("Station inconnue")
+
+def normaliser_texte_facultatif(valeur):
+    """Renvoie None pour un champ absent, sinon le texte sans espaces autour
+    pour les stations arrivées, pseudonyme, technicien, date résolution"""
+    if valeur is None:
+        return None
+    texte = valeur.strip()
+    if texte == "":
+        return None
+    return texte
+

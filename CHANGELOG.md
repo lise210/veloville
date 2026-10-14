@@ -22,6 +22,8 @@ Une section par version, avec les changements regroupés en
 - Tests des cibles valides, inconnues et des références incohérentes.
 - Contrôle des références aux stations existantes.
 - Tests des références connues, inconnues, absentes et du référentiel vide.
+- Normalisation des champs textuels facultatifs.
+- Tests des valeurs présentes, absentes, vides et composées d’espaces.
 
 
 ## [0.0.2] - 2026-10-14
