@@ -84,4 +84,15 @@ def verifier_dates_incident(statut, date_signalement, date_resolution):
             raise ValueError("Résolution antérieure au signalement")
     elif date_resolution is not None:
         raise ValueError("Incident non résolu avec une date de résolution")
+
+def verifier_cible_incident(cible, velo_id, station_id):
+    """Vérifie que les références correspondent à la cible"""
+    if cible == "velo":
+        if velo_id is None or station_id is not None:
+            raise ValueError("Références incorrectes pour un incident vélo")
+    elif cible == "station":
+        if station_id is None or velo_id is not None:
+            raise ValueError("Références incorrectes pour un incident station")
+    else:
+        raise ValueError("Cible non reconnue")
     

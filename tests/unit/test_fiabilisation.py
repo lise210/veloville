@@ -5,7 +5,7 @@
 
 import pytest
 
-from api.services.fiabilisation import normaliser_statut, normaliser_velo_id, convertir_entier_positif, convertir_date, convertir_horodatage, verifier_dates_incident
+from api.services.fiabilisation import normaliser_statut, normaliser_velo_id, convertir_entier_positif, convertir_date, convertir_horodatage, verifier_dates_incident, verifier_cible_incident
 from datetime import date, datetime
 
 
@@ -187,9 +187,40 @@ def test_incident_en_cours_avec_resolution():
             datetime(2026, 10, 14, 10, 0),
             datetime(2026, 10, 14, 11, 0))
 
-###################################################Test sur normaliser_status###############################################################################
+###################################################Test sur verifier_cible_incident###############################################################################
+def test_cible_velo_valide():
+    verifier_cible_incident("velo", "V1281", None)
 
+def test_cible_station_valide():
+    verifier_cible_incident("station", None, "S001")
 
+def test_cible_velo_sans_velo():
+    with pytest.raises(ValueError):
+        verifier_cible_incident("velo", None, None)
+
+def test_cible_station_sans_station():
+    with pytest.raises(ValueError):
+        verifier_cible_incident("station", None, None)
+
+def test_cible_velo_avec_deux_references():
+    with pytest.raises(ValueError):
+        verifier_cible_incident("velo", "V1281", "S001")
+
+def test_cible_station_avec_deux_references():
+    with pytest.raises(ValueError):
+        verifier_cible_incident("station", "V1281", "S001")
+
+def test_cible_velo_avec_reference_station():
+    with pytest.raises(ValueError):
+        verifier_cible_incident("velo", None, "S001")
+
+def test_cible_station_avec_reference_velo():
+    with pytest.raises(ValueError):
+        verifier_cible_incident("station", "V1281", None)
+
+def test_cible_inconnue():
+    with pytest.raises(ValueError):
+        verifier_cible_incident("autre", "V1281", None)
 
 ###################################################Test sur normaliser_status###############################################################################
 

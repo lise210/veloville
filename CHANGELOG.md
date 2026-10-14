@@ -18,6 +18,8 @@ Une section par version, avec les changements regroupés en
 - Tests des formats acceptés et des horodatages invalides.
 - Contrôle de cohérence entre le statut et les dates des incidents.
 - Tests des dates de résolution présentes, absentes et antérieures ou égales au signalement.
+- Contrôle de la cible des incidents et de leurs références vélo/station.
+- Tests des cibles valides, inconnues et des références incohérentes.
 
 
 ## [0.0.2] - 2026-10-14
