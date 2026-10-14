@@ -3,6 +3,14 @@
 Une section par version, avec les changements regroupés en
 « Ajouté », « Modifié », « Corrigé ».
 
+## [Non livré]
+
+### Ajouté
+- Indicateur d’activité par jour, calculé dans PostgreSQL avec SQLAlchemy.
+- Tests d’intégration des comptages, des bornes inclusives, d’une période vide et de l’absence de filtre.
+
+
+
 ## [0.0.3] - 2026-10-14
 
 ### Ajouté
