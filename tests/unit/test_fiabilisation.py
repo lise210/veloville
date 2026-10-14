@@ -5,7 +5,7 @@
 
 import pytest
 
-from api.services.fiabilisation import normaliser_statut, normaliser_velo_id, convertir_entier_positif, convertir_date, convertir_horodatage, verifier_dates_incident, verifier_cible_incident
+from api.services.fiabilisation import normaliser_statut, normaliser_velo_id, convertir_entier_positif, convertir_date, convertir_horodatage, verifier_dates_incident, verifier_cible_incident, verifier_reference_station
 from datetime import date, datetime
 
 
@@ -222,9 +222,21 @@ def test_cible_inconnue():
     with pytest.raises(ValueError):
         verifier_cible_incident("autre", "V1281", None)
 
-###################################################Test sur normaliser_status###############################################################################
+###################################################Test sur verifier_reference_station###############################################################################
+def test_reference_station_connue():
+    verifier_reference_station("S001", ["S001", "S002"])
 
+def test_reference_station_inconnue():
+    with pytest.raises(ValueError):
+        verifier_reference_station("S999", ["S001", "S002"])
 
+def test_reference_station_absente():
+    with pytest.raises(ValueError):
+        verifier_reference_station(None, ["S001", "S002"])
+
+def test_reference_station_referentiel_vide():
+    with pytest.raises(ValueError):
+        verifier_reference_station("S001", [])
 
 ###################################################Test sur normaliser_status###############################################################################
 

@@ -20,6 +20,8 @@ Une section par version, avec les changements regroupés en
 - Tests des dates de résolution présentes, absentes et antérieures ou égales au signalement.
 - Contrôle de la cible des incidents et de leurs références vélo/station.
 - Tests des cibles valides, inconnues et des références incohérentes.
+- Contrôle des références aux stations existantes.
+- Tests des références connues, inconnues, absentes et du référentiel vide.
 
 
 ## [0.0.2] - 2026-10-14

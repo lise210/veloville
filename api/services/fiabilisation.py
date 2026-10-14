@@ -95,4 +95,10 @@ def verifier_cible_incident(cible, velo_id, station_id):
             raise ValueError("Références incorrectes pour un incident station")
     else:
         raise ValueError("Cible non reconnue")
-    
+
+def verifier_reference_station(station_id, stations_connues):
+    """Vérifie qu'une station renseignée existe dans le référentiel"""
+    if station_id is None:
+        raise ValueError("Référence de station absente")
+    if station_id not in stations_connues:
+        raise ValueError("Station inconnue")
