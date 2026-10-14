@@ -57,6 +57,8 @@ Une section par version, avec les changements regroupés en
 - Journalisation des identifiants de vélo et horodatages normalisés.
 - Fiabilisation des incidents et conservation des lignes valides.
 - Journalisation des statuts normalisés, des rejets et des techniciens absents.
+- Modèle ORM Station et chargement des stations avec SQLAlchemy.
+- Vérification de deux chargements successifs : 120 stations, sans doublon.
 
 
 ## [0.0.2] - 2026-10-14

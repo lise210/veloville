@@ -204,8 +204,10 @@ Bilan prévisionnel :
 Les coordonnées écrites avec moins de cinq décimales sont conservées :
 leur stockage dans NUMERIC(8,5) ne change pas leur valeur.
 
-Ces résultats seront confirmés lors de l’import.
-Aucune station n’a encore été chargée dans PostgreSQL.
+Import des stations vérifié :
+- 120 stations présentes après la première exécution
+- 120 stations après la seconde exécution, sans doublon
+- coordonnées stockées avec cinq décimales, sans changement de valeur
 
 ### trajets.csv
 
@@ -300,5 +302,5 @@ Après application des traitements prévus, les volumes attendus sont :
 - 2 002 trajets ;
 - 177 incidents.
 
-Ces volumes seront vérifiés après l’import. Les doublons écartés,
-les rejets, les normalisations et les avertissements seront journalisés.
+Le volume des stations a été confirmé après deux exécutions de l’import.
+Les volumes des trajets et incidents restent à vérifier après leur chargement.

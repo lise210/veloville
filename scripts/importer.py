@@ -15,6 +15,10 @@ from decimal import InvalidOperation
 
 from api.services.fiabilisation import separer_doublons, normaliser_station_id, normaliser_texte_obligatoire, convertir_coordonnee, convertir_date, convertir_entier_positif, normaliser_trajet_id, normaliser_velo_id, convertir_horodatage, verifier_reference_station, normaliser_texte_facultatif, normaliser_type_usager, normaliser_usager_ref, verifier_usager_ref, normaliser_incident_id, normaliser_statut, normaliser_cible, verifier_cible_incident, verifier_type_incident, verifier_dates_incident, verifier_technicien
 
+from sqlalchemy import select
+from api.database import SessionLocal
+from api.models import Station
+
 def main() -> None:
     #keep_default_na=False : garde les champs vides comme ""
     #dtype=str : lit toutes les valeurs comme du texte (utilisation de .strip() dans mes fonctions dvpéesqui focntionne pour du texte)
@@ -242,7 +246,7 @@ def main() -> None:
             print(f"Incident refusé : {ligne['incident_id']} - {erreur}")
 
     print("Incidents valides :", len(incidents_valides))
-    
+
     print("Messages dans le journal :", len(journal))
 
     colonnes_journal = [
@@ -254,6 +258,23 @@ def main() -> None:
         "decision"]
 
     pd.DataFrame(journal, columns=colonnes_journal).to_csv("docs/journal_import.csv", index=False, encoding="utf-8")
+
+    #charge dans la bdd les stations uniquement si leur identifiant est absent
+    with SessionLocal() as db:
+        for station in stations_valides:
+            station_existante = db.scalar(select(Station).where(Station.station_id == station["station_id"]))
+            if station_existante is None:
+                nouvelle_station = Station(
+                    station_id=station["station_id"],
+                    nom=station["nom"],
+                    commune=station["commune"],
+                    capacite=station["capacite"],
+                    latitude=station["latitude"],
+                    longitude=station["longitude"],
+                    date_mise_en_service=station["date_mise_en_service"])
+                db.add(nouvelle_station)
+        db.commit()
+    print("Chargement des stations terminé.")
 
 
 if __name__ == "__main__":
