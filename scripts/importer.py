@@ -17,7 +17,7 @@ from api.services.fiabilisation import separer_doublons, normaliser_station_id, 
 
 from sqlalchemy import select
 from api.database import SessionLocal
-from api.models import Station
+from api.models import Station, Trajet
 
 def main() -> None:
     #keep_default_na=False : garde les champs vides comme ""
@@ -273,9 +273,25 @@ def main() -> None:
                     longitude=station["longitude"],
                     date_mise_en_service=station["date_mise_en_service"])
                 db.add(nouvelle_station)
-        db.commit()
-    print("Chargement des stations terminé.")
+        
+        # Envoie les nouvelles stations à PostgreSQL sans valider la transaction.
+        db.flush()
+        for trajet in trajets_valides:
+            trajet_existant = db.scalar(select(Trajet).where(Trajet.trajet_id == trajet["trajet_id"]))
+            if trajet_existant is None:
+                nouveau_trajet = Trajet(
+                    trajet_id=trajet["trajet_id"],
+                    velo_id=trajet["velo_id"],
+                    depart_horodatage=trajet["depart_horodatage"],
+                    station_depart=trajet["station_depart"],
+                    station_arrivee=trajet["station_arrivee"],
+                    duree_secondes=trajet["duree_secondes"],
+                    type_usager=trajet["type_usager"],
+                    usager_ref=trajet["usager_ref"])
+                db.add(nouveau_trajet)
 
+        db.commit()
+    print("Chargement des stations et trajets terminé.")
 
 if __name__ == "__main__":
     main()

@@ -246,8 +246,13 @@ Par exemple, T480152 possède une date au format français et une arrivée
 S999 : la date peut être corrigée, mais la ligne reste à rejeter
 pour sa station inconnue.
 
-Ces résultats sont des prévisions à confirmer lors de l’import.
-Aucun trajet n’a encore été chargé dans PostgreSQL.
+Import des trajets vérifié :
+- 2 002 trajets présents après la première exécution
+- 2 002 trajets après la seconde exécution, sans doublon
+- 16 lignes rejetées et 12 doublons écartés, journalisés.
+
+Bilan confirmé :
+2 002 trajets en base + 16 rejets + 12 doublons écartés = 2 030 lignes.
 
 ### incidents.csv
 
@@ -303,4 +308,6 @@ Après application des traitements prévus, les volumes attendus sont :
 - 177 incidents.
 
 Le volume des stations a été confirmé après deux exécutions de l’import.
-Les volumes des trajets et incidents restent à vérifier après leur chargement.
+Les volumes des stations et trajets ont été confirmés après deux exécutions. 
+
+Le volume des incidents reste à vérifier après leur chargement.
