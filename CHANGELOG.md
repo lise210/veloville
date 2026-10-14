@@ -63,6 +63,7 @@ Une section par version, avec les changements regroupés en
 - Vérification de deux chargements successifs : 2 002 trajets, sans doublon.
 - Modèle ORM Incident et chargement des incidents avec SQLAlchemy.
 - Vérification de deux chargements successifs des trois tables, sans doublon.
+- Résultats des tests et mesure de couverture documentés dans le README.
 
 
 ## [0.0.2] - 2026-10-14

@@ -20,14 +20,20 @@ La préparation de l’environnement est réalisée :
 - Script sql/schema.sql exécuté deux fois sans erreur --> rejouable.
 - Comptes exploitant01 et direction01 chargés avec leurs rôles.
 - Droits de lecture, insertion et modification vérifiés pour le rôle PostgreSQL veloville sur les quatre tables.
+- Audit des trois CSV réalisé avec Python et Pandas.
+- Fonctions de fiabilisation vérifiées par des tests unitaires.
+- Modèles ORM Station, Trajet et Incident définis.
+- Import réalisé : 120 stations, 2 002 trajets et 177 incidents.
+- Deux exécutions successives sans doublon supplémentaire.
+- Journal des doublons, rejets, normalisations et avertissements créé.
 
-L’audit et l’import des données CSV, les routes API, l’authentification et l’interface restent à développer. Les contraintes du schéma ont été créées, mais leurs cas d’acceptation et de rejet restent à tester.
+Le calcul des indicateurs, les routes API, l’authentification et l’interface restent à développer. Plusieurs contraintes SQL ont été vérifiées manuellement. Les résultats sont dans docs/schema-donnees.md.
 
 ## Technologies et prérequis
 
 - Windows et PowerShell pour les commandes ci-dessous,
 - Python 3.14.7 utilisé pendant le développement,
-- PostgreSQL 18 utilisé pendant le développement, avec pgAdmin.,
+- PostgreSQL 18 utilisé pendant le développement, avec pgAdmin,
 - Git,
 - FastAPI, SQLAlchemy, Psycopg, Streamlit et pytest.
 
@@ -37,18 +43,18 @@ Les versions des bibliothèques sont fixées dans `requirements.txt`.
 
 ## Récupérer le projet
 
-Le dépôt GitHub est privé : un accès est nécessaire.
+Le dépôt GitHub est privé : un accès est nécessaire (il sera repassé en public avant l'envoie!).
+
+Cloner le projet et sélectionner la branche de travail actuelle :
 
 ```powershell
 git clone https://github.com/lise210/veloville.git
 cd veloville
 ```
 
-La préparation de l’environnement a été fusionnée dans main et identifiée par le tag v0.0.1.
+La branche main contient les étapes déjà validées.
 
-Le schéma SQL est actuellement développé sur la branche fonctionnalite/schema-donnees, envoyée sur GitHub mais pas encore fusionnée dans main. 
-
-Toutes les commandes suivantes sont exécutées depuis la racine du projet, dans le dossier contenant `requirements.txt`.
+Les commandes suivantes sont exécutées depuis le dossier veloville.
 
 ## Préparer l’environnement Python
 
@@ -153,6 +159,39 @@ Résultat attendu :
 
 La réexécution de schema.sql conserve les tables et les données grâce à IF NOT EXISTS. Elle ne met pas à jour la structure d’une table déjà existante.
 
+## Importer les données
+
+Depuis la racine du projet, avec l’environnement virtuel activé :
+
+```powershell
+python -m scripts.importer
+```
+
+Le script :
+
+- lit les trois CSV avec Pandas 
+- applique les fonctions de fiabilisation 
+- écarte les doublons et les lignes invalides 
+- écrit le journal dans `docs/journal_import.csv` 
+- charge les stations, puis les trajets et les incidents avec SQLAlchemy.
+
+Les lignes dont l’identifiant existe déjà en base ne sont pas réinsérées
+ni remplacées. Deux exécutions successives ont conservé les mêmes volumes :
+
+| Table | Nombre de lignes |
+|---|---:|
+| station | 120 |
+| trajet | 2 002 |
+| incident | 177 |
+
+Le journal est remplacé à chaque exécution.
+Il contient 192 messages sur les données fournies :
+12 doublons, 19 rejets, 136 normalisations et 25 avertissements.
+
+Un message de normalisation ou d’avertissement ne signifie pas
+que la ligne est rejetée.
+
+
 ## Vérifier la connexion PostgreSQL
 
 Le test utilise la configuration de `.env` et vérifie que
@@ -170,7 +209,34 @@ Résultat obtenu pendant la préparation :
 ```
 
 Ce résultat concerne uniquement le test de connexion.
-La suite complète de tests reste à développer.
+Les tests de l’API et des indicateurs restent à développer.
+
+## Tester les fonctions de fiabilisation
+
+```powershell
+python -m pytest tests/unit/test_fiabilisation.py -v
+```
+
+Dernier résultat obtenu : 134 passed.
+Ces tests vérifient les fonctions sans accéder à PostgreSQL.
+
+## Tests et couverture des modules métier
+
+Depuis la racine du projet, avec l’environnement virtuel activé :
+
+```powershell
+pytest --cov=api/services --cov-report=term-missing
+```
+
+Cette commande exécute les tests et mesure la couverture. Le rapport indique également les lignes non exécutées.
+
+Résultat obtenu le 14/10/2026 :
+- 135 tests réussis : 134 tests de fiabilisation et 1 test de connexion
+- fiabilisation.py : 157 instructions, aucune non exécutée, soit 100 % de couverture.
+
+Les 100 % indiquent que toutes les instructions de fiabilisation.py ont été exécutées pendant les tests.
+
+Le module indicateurs.py est encore vide : son affichage à 100 % ne valide aucun calcul. La couverture sera mesurée à nouveau après le développement des indicateurs.
 
 ## Organisation du projet
 
@@ -178,11 +244,11 @@ La suite complète de tests reste à développer.
 api/
   config.py            Chargement de la configuration
   database.py          Connexion et sessions SQLAlchemy
-  models.py            Modèles des tables à développer
+  models.py            Modèles Station, Trajet et Incident. Utilisateur à développer
   schemas.py           Schémas de validation à développer
   securite.py          Sécurité à développer
   routers/             Routes API à développer
-  services/            Traitements métier à développer
+  services/            Fiabilisation testée. Indicateurs à développer
 
 data/                  Exports CSV fournis
 docs/                  Documentation et recette
@@ -190,7 +256,7 @@ front/                 Interface Streamlit à développer
 scripts/               Génération du secret, import et sauvegarde
 sql/                   Schéma et comptes PostgreSQL
 tests/
-  unit/                Tests métier à développer
+  unit/                Tests des fonctions de fiabilisation
   integration/         Tests d’intégration
 ```
 
@@ -206,11 +272,15 @@ tests/
 
 configuration/environnement : préparation terminée et fusionnée dans main par la pull request n°1.
 
-fonctionnalite/schema-donnees : création du schéma SQL et documentation en cours.
+fonctionnalite/schema-donnees : schéma et audit terminés, fusionnés dans main par la pull request n°2.
+
+fonctionnalite/import-donnees : fiabilisation et chargement des CSV, en cours avant fusion dans main.
 
 Le tag `v0.0.0` identifie le squelette initial fourni, au commit `123bdcb`.
 
 Le tag `v0.0.1` identifie l’environnement configuré et la connexion PostgreSQL vérifiée, au commit de fusion 5f63809.
+
+Le tag `v0.0.2` identifie le schéma et l’audit des trois CSV.
 
 Les fichiers `.env`, les environnements virtuels et les sauvegardes
 sont exclus du dépôt.
@@ -263,11 +333,8 @@ Pour une nouvelle installation, exécuter directement `schema.sql` avec le rôle
 
 ## Étapes restantes
 
-- audit des fichiers CSV,
-- documentation du modèle de données et tests des contraintes SQL,
-- fiabilisation et import idempotent,
 - calcul des indicateurs,
-- API REST, authentification JWT et contrôle des rôles,
+- modèle ORM Utilisateur, API REST, authentification JWT et contrôle des rôles,
 - interface Streamlit,
 - sauvegarde et restauration,
 - tests métier, couverture et recette,
