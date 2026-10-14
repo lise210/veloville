@@ -3,7 +3,7 @@
 Une section par version, avec les changements regroupés en
 « Ajouté », « Modifié », « Corrigé ».
 
-## [Non livré]
+## [0.0.2] - 2026-10-14
 
 ### Ajouté
 - Tables station, trajet, incident et utilisateur avec leurs contraintes.
