@@ -221,3 +221,40 @@ def test_trajets_sans_token(client):
 
     assert reponse.status_code == 401
     assert reponse.json() == {"detail": "Authentification requise"}
+
+
+def test_incidents_pagination_par_defaut(client, exploitant_token):
+    """Vérifie la première page et le tri des incidents"""
+    reponse = client.get("/incidents",
+        headers={"Authorization": f"Bearer {exploitant_token}"})
+
+    assert reponse.status_code == 200
+    contenu = reponse.json()
+    assert contenu["total"] == 177
+    assert contenu["page"] == 1
+    assert contenu["taille_page"] == 20
+    assert len(contenu["resultats"]) == 20
+    dates = [incident["date_signalement"] for incident in contenu["resultats"]]
+    assert dates == sorted(dates, reverse=True)
+
+
+def test_incidents_filtre_statut(client, exploitant_token):
+    """Vérifie le filtre sur les incidents ouverts."""
+    reponse = client.get("/incidents",
+        params={"statut": "ouvert", "taille_page": 100},
+        headers={"Authorization": f"Bearer {exploitant_token}"})
+
+    assert reponse.status_code == 200
+    contenu = reponse.json()
+    assert contenu["total"] == 55
+    assert len(contenu["resultats"]) == 55
+    for incident in contenu["resultats"]:
+        assert incident["statut"] == "ouvert"
+
+
+def test_incidents_sans_token(client):
+    """Vérifie que la consultation exige une connexion"""
+    reponse = client.get("/incidents")
+
+    assert reponse.status_code == 401
+    assert reponse.json() == {"detail": "Authentification requise"}

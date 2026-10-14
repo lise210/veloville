@@ -61,3 +61,25 @@ class TrajetsPaginesResponse(BaseModel):
     page: int
     taille_page: int
     resultats: list[TrajetResponse]
+
+
+class IncidentResponse(BaseModel):
+    """Données d'un incident renvoyées par l'API"""
+    model_config = ConfigDict(from_attributes=True)
+    incident_id: str
+    date_signalement: datetime
+    cible: str
+    velo_id: str | None
+    station_id: str | None
+    type_incident: str
+    statut: str
+    date_resolution: datetime | None
+    technicien: str | None
+
+
+class IncidentsPaginesResponse(BaseModel):
+    """Une page d'incidents et ses informations de pagination"""
+    total: int
+    page: int
+    taille_page: int
+    resultats: list[IncidentResponse]

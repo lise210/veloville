@@ -20,6 +20,9 @@ Une section par version, avec les changements regroupés en
 - Tests de pagination, du filtre par commune et du refus des paramètres hors limites.
 - Route GET /trajets protégée, avec pagination et filtres par dates et station de départ ou d’arrivée.
 - Tests de pagination par défaut, des filtres et du refus d’accès sans jeton.
+- Route GET /incidents protégée, avec filtre par statut et pagination.
+- Tri des incidents du plus récent au plus ancien.
+- Tests de pagination, du filtre par statut et du refus d’accès sans jeton.
 
 ## [0.0.4] - 2026-10-14
 
