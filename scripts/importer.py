@@ -13,7 +13,7 @@ Usage actuel : python -m scripts.importer
 import pandas as pd 
 from decimal import InvalidOperation
 
-from api.services.fiabilisation import separer_doublons, normaliser_station_id, normaliser_texte_obligatoire, convertir_coordonnee, convertir_date, convertir_entier_positif, normaliser_trajet_id, normaliser_velo_id, convertir_horodatage, verifier_reference_station, normaliser_texte_facultatif, normaliser_type_usager, normaliser_usager_ref, verifier_usager_ref
+from api.services.fiabilisation import separer_doublons, normaliser_station_id, normaliser_texte_obligatoire, convertir_coordonnee, convertir_date, convertir_entier_positif, normaliser_trajet_id, normaliser_velo_id, convertir_horodatage, verifier_reference_station, normaliser_texte_facultatif, normaliser_type_usager, normaliser_usager_ref, verifier_usager_ref, normaliser_incident_id, normaliser_statut, normaliser_cible, verifier_cible_incident, verifier_type_incident, verifier_dates_incident, verifier_technicien
 
 def main() -> None:
     #keep_default_na=False : garde les champs vides comme ""
@@ -102,8 +102,29 @@ def main() -> None:
             trajet_id = normaliser_trajet_id(ligne[colonne])
             colonne = "velo_id"
             velo_id = normaliser_velo_id(ligne[colonne])
+
+            if velo_id != ligne[colonne]:
+                journal.append({
+                    "fichier_source": "trajets.csv",
+                    "identifiant": ligne["trajet_id"],
+                    "colonne": colonne,
+                    "valeur": ligne[colonne],
+                    "motif": f"Identifiant de vélo normalisé en {velo_id}",
+                    "decision": "normalisation"})
+
             colonne = "depart_horodatage"
             depart_horodatage = convertir_horodatage(ligne[colonne])
+
+            horodatage_normalise = depart_horodatage.strftime("%Y-%m-%d %H:%M:%S")
+            if horodatage_normalise != ligne[colonne]:
+                journal.append({
+                    "fichier_source": "trajets.csv",
+                    "identifiant": ligne["trajet_id"],
+                    "colonne": colonne,
+                    "valeur": ligne[colonne],
+                    "motif": f"Horodatage normalisé en {horodatage_normalise}",
+                    "decision": "normalisation"})
+
             colonne = "station_depart"
             station_depart = normaliser_station_id(ligne[colonne])
             verifier_reference_station(station_depart, stations_connues)  
@@ -147,7 +168,81 @@ def main() -> None:
             print(f"Trajet refusé : {ligne['trajet_id']} - {erreur}")
    
     print("Trajets valides :", len(trajets_valides))
-   
+
+    # Contrôle des incidents
+    lignes_incidents = incidents.to_dict(orient="records")
+    incidents_valides = []
+    for ligne in lignes_incidents:
+        try:
+            colonne = "incident_id"
+            incident_id = normaliser_incident_id(ligne[colonne])
+            colonne = "statut"
+            statut = normaliser_statut(ligne[colonne])
+            if statut != ligne[colonne]:
+                journal.append({
+                    "fichier_source": "incidents.csv",
+                    "identifiant": ligne["incident_id"],
+                    "colonne": colonne,
+                    "valeur": ligne[colonne],
+                    "motif": f"Statut normalisé en {statut}",
+                    "decision": "normalisation"})
+            colonne = "date_signalement"
+            date_signalement = convertir_horodatage(ligne[colonne])
+            colonne = "cible"
+            cible = normaliser_cible(ligne[colonne])
+            colonne = "velo_id"
+            velo_id_incident = normaliser_texte_facultatif(ligne[colonne])
+            if velo_id_incident is not None:
+                velo_id_incident = normaliser_velo_id(velo_id_incident)
+            colonne = "station_id"
+            station_id_incident = normaliser_texte_facultatif(ligne[colonne])
+            if station_id_incident is not None:
+                station_id_incident = normaliser_station_id(station_id_incident)
+                verifier_reference_station(station_id_incident, stations_connues)
+            colonne = "cible"
+            verifier_cible_incident(cible, velo_id_incident, station_id_incident)
+            colonne = "type_incident"
+            type_incident = verifier_type_incident(ligne[colonne])
+            colonne = "date_resolution"
+            date_resolution = normaliser_texte_facultatif(ligne[colonne])
+            if date_resolution is not None:
+                date_resolution = convertir_horodatage(date_resolution)
+            verifier_dates_incident(statut, date_signalement, date_resolution)
+            colonne = "technicien"
+            technicien = normaliser_texte_facultatif(ligne[colonne])
+            if technicien is not None:
+                technicien = normaliser_texte_obligatoire(technicien, 100)
+            avertissement = verifier_technicien(statut, technicien)
+            if avertissement is not None:
+                journal.append({
+                    "fichier_source": "incidents.csv",
+                    "identifiant": ligne["incident_id"],
+                    "colonne": colonne,
+                    "valeur": ligne[colonne],
+                    "motif": avertissement,
+                    "decision": "avertissement"})
+            incidents_valides.append({
+                "incident_id": incident_id,
+                "date_signalement": date_signalement,
+                "cible": cible,
+                "velo_id": velo_id_incident,
+                "station_id": station_id_incident,
+                "type_incident": type_incident,
+                "statut": statut,
+                "date_resolution": date_resolution,
+                "technicien": technicien})
+        except ValueError as erreur:
+            journal.append({
+                "fichier_source": "incidents.csv",
+                "identifiant": ligne["incident_id"],
+                "colonne": colonne,
+                "valeur": ligne[colonne],
+                "motif": str(erreur),
+                "decision": "rejet"})
+            print(f"Incident refusé : {ligne['incident_id']} - {erreur}")
+
+    print("Incidents valides :", len(incidents_valides))
+    
     print("Messages dans le journal :", len(journal))
 
     colonnes_journal = [

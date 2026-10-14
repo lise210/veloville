@@ -54,6 +54,9 @@ Une section par version, avec les changements regroupés en
 - Création du journal d’import et traçabilité des doublons de trajets.
 - Fiabilisation des trajets avec les fonctions testées.
 - Conservation des trajets valides et journalisation des rejets.
+- Journalisation des identifiants de vélo et horodatages normalisés.
+- Fiabilisation des incidents et conservation des lignes valides.
+- Journalisation des statuts normalisés, des rejets et des techniciens absents.
 
 
 ## [0.0.2] - 2026-10-14
