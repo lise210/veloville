@@ -9,6 +9,9 @@ couvertes par tests/unit/.
 """
 
 import re
+from datetime import datetime
+
+
 
 def normaliser_statut(statut):
     """Normalise un statut et refuse les valeurs inconnues"""
@@ -40,3 +43,16 @@ def convertir_entier_positif(valeur):
     if entier <= 0:
         raise ValueError("Valeur non positive")
     return entier
+
+def convertir_date(valeur):
+    """Convertit une date au format AAAA-MM-JJ"""
+    if valeur is None:
+        raise ValueError("Date absente")
+    texte = valeur.strip()
+    if re.fullmatch(r"[0-9]{4}-[0-9]{2}-[0-9]{2}", texte) is None:
+        raise ValueError("Format de date non reconnu")
+    try:
+        date_convertie = datetime.strptime(texte, "%Y-%m-%d")
+    except ValueError:
+        raise ValueError("Date impossible") from None
+    return date_convertie.date()

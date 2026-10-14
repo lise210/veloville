@@ -5,7 +5,8 @@
 
 import pytest
 
-from api.services.fiabilisation import normaliser_statut, normaliser_velo_id, convertir_entier_positif
+from api.services.fiabilisation import normaliser_statut, normaliser_velo_id, convertir_entier_positif, convertir_date
+from datetime import date
 
 
 ###################################################Test sur normaliser_status###############################################################################
@@ -73,9 +74,28 @@ def test_entier_absent():
     with pytest.raises(ValueError):
         convertir_entier_positif(None)
 
-###################################################Test sur normaliser_status###############################################################################
+###################################################Test sur convertir_date###############################################################################
+def test_date_valide():
+    assert convertir_date("2023-08-07") == date(2023, 8, 7)
 
+def test_date_avec_espaces():
+    assert convertir_date(" 2023-08-07 ") == date(2023, 8, 7)
 
+def test_date_impossible():
+    with pytest.raises(ValueError):
+        convertir_date("2026-02-30")
+
+def test_date_mauvais_format():
+    with pytest.raises(ValueError):
+        convertir_date("07/08/2023")
+
+def test_date_absente():
+    with pytest.raises(ValueError):
+        convertir_date(None)
+
+def test_date_vide():
+    with pytest.raises(ValueError):
+        convertir_date("")
 
 ###################################################Test sur normaliser_status###############################################################################
 
