@@ -158,6 +158,7 @@ Les droits SELECT, INSERT et UPDATE du rôle veloville ont été vérifiés sur 
 | Résolution égale au signalement | Acceptée |
 | Incident résolu sans date de résolution | Refusé par `ck_incident_resolution` |
 | Incident ouvert avec date de résolution | Refusé par `ck_incident_resolution` |
+| Stations d’arrivée renseignées mais inexistantes après import | 0 |
 
 Les insertions de vérification ont été exécutées dans des transactions annulées avec ROLLBACK : aucune donnée de test n’est conservée.
 
@@ -204,8 +205,10 @@ Bilan prévisionnel :
 Les coordonnées écrites avec moins de cinq décimales sont conservées :
 leur stockage dans NUMERIC(8,5) ne change pas leur valeur.
 
-Ces résultats seront confirmés lors de l’import.
-Aucune station n’a encore été chargée dans PostgreSQL.
+Import des stations vérifié :
+- 120 stations présentes après la première exécution
+- 120 stations après la seconde exécution, sans doublon
+- coordonnées stockées avec cinq décimales, sans changement de valeur
 
 ### trajets.csv
 
@@ -244,8 +247,13 @@ Par exemple, T480152 possède une date au format français et une arrivée
 S999 : la date peut être corrigée, mais la ligne reste à rejeter
 pour sa station inconnue.
 
-Ces résultats sont des prévisions à confirmer lors de l’import.
-Aucun trajet n’a encore été chargé dans PostgreSQL.
+Import des trajets vérifié :
+- 2 002 trajets présents après la première exécution
+- 2 002 trajets après la seconde exécution, sans doublon
+- 16 lignes rejetées et 12 doublons écartés, journalisés.
+
+Bilan confirmé :
+2 002 trajets en base + 16 rejets + 12 doublons écartés = 2 030 lignes.
 
 ### incidents.csv
 
@@ -283,8 +291,13 @@ Bilan prévisionnel :
 Les normalisations et avertissements ne sont pas des rejets.
 Une ligne peut recevoir plusieurs messages dans le journal.
 
-Ces résultats seront confirmés lors de l’import.
-Aucun incident n’a encore été chargé dans PostgreSQL.
+Import des incidents vérifié :
+- 177 incidents présents après la première exécution 
+- 177 incidents après la seconde exécution, sans doublon 
+- 3 lignes rejetées pour une résolution antérieure au signalement.
+
+Bilan confirmé :
+177 incidents en base + 3 rejets + 0 doublon = 180 lignes.
 
 ### Conclusion de l’audit
 
@@ -300,5 +313,9 @@ Après application des traitements prévus, les volumes attendus sont :
 - 2 002 trajets ;
 - 177 incidents.
 
-Ces volumes seront vérifiés après l’import. Les doublons écartés,
-les rejets, les normalisations et les avertissements seront journalisés.
+Les volumes ont été confirmés après deux exécutions de l’import :
+120 stations, 2 002 trajets et 177 incidents.
+La seconde exécution n’a créé aucun doublon.
+
+Le journal docs/journal_import.csv contient 192 messages :
+12 doublons, 19 rejets, 136 normalisations et 25 avertissements.
