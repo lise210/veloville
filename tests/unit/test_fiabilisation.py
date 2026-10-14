@@ -5,8 +5,8 @@
 
 import pytest
 
-from api.services.fiabilisation import normaliser_statut, normaliser_velo_id, convertir_entier_positif, convertir_date
-from datetime import date
+from api.services.fiabilisation import normaliser_statut, normaliser_velo_id, convertir_entier_positif, convertir_date, convertir_horodatage
+from datetime import date, datetime
 
 
 ###################################################Test sur normaliser_status###############################################################################
@@ -96,6 +96,55 @@ def test_date_absente():
 def test_date_vide():
     with pytest.raises(ValueError):
         convertir_date("")
+
+###################################################Test sur convertir_horodatage###############################################################################
+def test_horodatage_avec_secondes():
+    resultat = convertir_horodatage("2026-08-24 08:39:56")
+    assert resultat == datetime(2026, 8, 24, 8, 39, 56)
+
+def test_horodatage_sans_secondes():
+    resultat = convertir_horodatage("2026-07-23 18:00")
+    assert resultat == datetime(2026, 7, 23, 18, 0, 0)
+
+def test_horodatage_format_francais():
+    resultat = convertir_horodatage("24/08/2026 11:01")
+    assert resultat == datetime(2026, 8, 24, 11, 1, 0)
+
+def test_horodatage_avec_espaces():
+    resultat = convertir_horodatage(" 2026-07-23 18:00 ")
+    assert resultat == datetime(2026, 7, 23, 18, 0, 0)
+
+def test_horodatage_date_impossible():
+    with pytest.raises(ValueError):
+        convertir_horodatage("2026-02-30 10:00")
+
+def test_horodatage_heure_impossible():
+    with pytest.raises(ValueError):
+        convertir_horodatage("2026-07-23 25:00")
+
+def test_horodatage_format_inconnu():
+    with pytest.raises(ValueError):
+        convertir_horodatage("23 juillet 2026 à 18h")
+
+def test_horodatage_absent():
+    with pytest.raises(ValueError):
+        convertir_horodatage(None)
+
+def test_horodatage_vide():
+    with pytest.raises(ValueError):
+        convertir_horodatage("")
+
+###################################################Test sur normaliser_status###############################################################################
+
+
+
+###################################################Test sur normaliser_status###############################################################################
+
+
+
+###################################################Test sur normaliser_status###############################################################################
+
+
 
 ###################################################Test sur normaliser_status###############################################################################
 

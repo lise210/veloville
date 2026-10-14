@@ -14,7 +14,8 @@ Une section par version, avec les changements regroupés en
 - Tests unitaires des capacités et durées : valeurs valides, nulles, négatives, décimales, non numériques et absentes.
 - Fonction de conversion des dates de mise en service des stations.
 - Tests des dates valides, impossibles, absentes et au mauvais format.
-
+- Conversion des horodatages des trajets et incidents (format français aussi repéré dans les CSV).
+- Tests des formats acceptés et des horodatages invalides.
 
 
 ## [0.0.2] - 2026-10-14

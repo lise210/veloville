@@ -52,7 +52,25 @@ def convertir_date(valeur):
     if re.fullmatch(r"[0-9]{4}-[0-9]{2}-[0-9]{2}", texte) is None:
         raise ValueError("Format de date non reconnu")
     try:
+        #datetime.strptime() : permet de convertir une chaîne de caractères représentant une date et une heure en un objet datetime, selon un format spécifié
         date_convertie = datetime.strptime(texte, "%Y-%m-%d")
     except ValueError:
         raise ValueError("Date impossible") from None
     return date_convertie.date()
+
+def convertir_horodatage(valeur):
+    """Convertit une date et une heure dans les formats acceptés"""
+    if valeur is None:
+        raise ValueError("Horodatage absent")
+    texte = valeur.strip()
+    formats_acceptes = [
+        "%Y-%m-%d %H:%M:%S",
+        "%Y-%m-%d %H:%M",
+        "%d/%m/%Y %H:%M"]
+    for format_date in formats_acceptes:
+        try:
+            return datetime.strptime(texte, format_date)
+        except ValueError:
+            #si échoue, passe au format suivant
+            continue
+    raise ValueError("Horodatage impossible ou format non reconnu")
