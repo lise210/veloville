@@ -48,6 +48,9 @@ Une section par version, avec les changements regroupés en
 - Tests des cibles valides, à normaliser, inconnues et absentes.
 - Séparation des lignes uniques et des doublons strictement identiques.
 - Tests des répétitions, des lignes différentes et de la liste vide.
+- Lecture des trois CSV avec Pandas dans scripts/importer.py.
+- Séparation des doublons de trajets avec la fonction `separer_doublons` déjà testée.
+
 
 ## [0.0.2] - 2026-10-14
 
