@@ -46,6 +46,8 @@ Une section par version, avec les changements regroupés en
 - Tests des coordonnées valides, absentes, non numériques et hors limites.
 - Normalisation des cibles vélo et station des incidents.
 - Tests des cibles valides, à normaliser, inconnues et absentes.
+- Séparation des lignes uniques et des doublons strictement identiques.
+- Tests des répétitions, des lignes différentes et de la liste vide.
 
 ## [0.0.2] - 2026-10-14
 

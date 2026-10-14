@@ -217,3 +217,14 @@ def normaliser_cible(cible):
     if cible_normalisee not in ["velo", "station"]:
         raise ValueError("Cible non reconnue")
     return cible_normalisee
+
+def separer_doublons(lignes):
+    """Sépare les lignes uniques des répétitions strictement identiques"""
+    lignes_uniques = []
+    doublons = []
+    for ligne in lignes:
+        if ligne in lignes_uniques:
+            doublons.append(ligne)
+        else:
+            lignes_uniques.append(ligne)
+    return lignes_uniques, doublons

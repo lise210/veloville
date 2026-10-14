@@ -5,7 +5,7 @@
 
 import pytest
 
-from api.services.fiabilisation import normaliser_statut, normaliser_velo_id, convertir_entier_positif, convertir_date, convertir_horodatage, verifier_dates_incident, verifier_cible_incident, verifier_reference_station, normaliser_texte_facultatif, normaliser_texte_obligatoire, normaliser_station_id, normaliser_trajet_id, normaliser_incident_id, normaliser_type_usager, normaliser_usager_ref, verifier_usager_ref, verifier_technicien, verifier_type_incident, convertir_coordonnee, normaliser_cible
+from api.services.fiabilisation import normaliser_statut, normaliser_velo_id, convertir_entier_positif, convertir_date, convertir_horodatage, verifier_dates_incident, verifier_cible_incident, verifier_reference_station, normaliser_texte_facultatif, normaliser_texte_obligatoire, normaliser_station_id, normaliser_trajet_id, normaliser_incident_id, normaliser_type_usager, normaliser_usager_ref, verifier_usager_ref, verifier_technicien, verifier_type_incident, convertir_coordonnee, normaliser_cible, separer_doublons
 
 from datetime import date, datetime
 from decimal import Decimal, InvalidOperation
@@ -514,8 +514,39 @@ def test_normalisation_cible_vide():
     with pytest.raises(ValueError):
         normaliser_cible("")
 
-###################################################Test sur normaliser_status###############################################################################
+###################################################Test sur separer_doublons###############################################################################
+def test_doublons_aucune_repetition():
+    lignes = [
+        {"trajet_id": "T480001", "duree_secondes": "120"},
+        {"trajet_id": "T480002", "duree_secondes": "180"}]
+    uniques, doublons = separer_doublons(lignes)
+    assert uniques == lignes
+    assert doublons == []
 
+def test_doublons_ligne_identique():
+    ligne = {"trajet_id": "T480001", "duree_secondes": "120"}
+    uniques, doublons = separer_doublons([ligne, ligne])
+    assert uniques == [ligne]
+    assert doublons == [ligne]
+
+def test_doublons_plusieurs_repetitions():
+    ligne = {"trajet_id": "T480001", "duree_secondes": "120"}
+    uniques, doublons = separer_doublons([ligne, ligne, ligne])
+    assert uniques == [ligne]
+    assert doublons == [ligne, ligne]
+
+def test_meme_identifiant_valeurs_differentes():
+    lignes = [
+        {"trajet_id": "T480001", "duree_secondes": "120"},
+        {"trajet_id": "T480001", "duree_secondes": "180"}]
+    uniques, doublons = separer_doublons(lignes)
+    assert uniques == lignes
+    assert doublons == []
+
+def test_doublons_liste_vide():
+    uniques, doublons = separer_doublons([])
+    assert uniques == []
+    assert doublons == []
 
 
 ###################################################Test sur normaliser_status###############################################################################
