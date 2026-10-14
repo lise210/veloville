@@ -3,7 +3,7 @@
 Une section par version, avec les changements regroupés en
 « Ajouté », « Modifié », « Corrigé ».
 
-## [Non livré]
+## [0.0.3] - 2026-10-14
 
 ### Ajouté
 - Fonction de normalisation des statuts d’incident (normaliser_statut).

@@ -158,6 +158,7 @@ Les droits SELECT, INSERT et UPDATE du rôle veloville ont été vérifiés sur 
 | Résolution égale au signalement | Acceptée |
 | Incident résolu sans date de résolution | Refusé par `ck_incident_resolution` |
 | Incident ouvert avec date de résolution | Refusé par `ck_incident_resolution` |
+| Stations d’arrivée renseignées mais inexistantes après import | 0 |
 
 Les insertions de vérification ont été exécutées dans des transactions annulées avec ROLLBACK : aucune donnée de test n’est conservée.
 
