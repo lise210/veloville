@@ -26,6 +26,8 @@ Une section par version, avec les changements regroupés en
 - Tests des valeurs présentes, absentes, vides et composées d’espaces.
 - Contrôle des textes obligatoires et de leur longueur maximale.
 - Tests des textes valides, absents, vides et trop longs.
+- Normalisation et contrôle du format des identifiants de station.
+- Tests des identifiants de station valides, à normaliser et invalides.
 
 
 

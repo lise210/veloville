@@ -5,7 +5,7 @@
 
 import pytest
 
-from api.services.fiabilisation import normaliser_statut, normaliser_velo_id, convertir_entier_positif, convertir_date, convertir_horodatage, verifier_dates_incident, verifier_cible_incident, verifier_reference_station, normaliser_texte_facultatif, normaliser_texte_obligatoire
+from api.services.fiabilisation import normaliser_statut, normaliser_velo_id, convertir_entier_positif, convertir_date, convertir_horodatage, verifier_dates_incident, verifier_cible_incident, verifier_reference_station, normaliser_texte_facultatif, normaliser_texte_obligatoire, normaliser_station_id
 from datetime import date, datetime
 
 
@@ -280,9 +280,31 @@ def test_texte_obligatoire_uniquement_espaces():
     with pytest.raises(ValueError):
         normaliser_texte_obligatoire("   ", 100)
 
-###################################################Test sur normaliser_status###############################################################################
+###################################################Test sur normaliser_station_id###############################################################################
+def test_station_id_valide():
+    assert normaliser_station_id("S001") == "S001"
 
+def test_station_id_minuscules():
+    assert normaliser_station_id("s001") == "S001"
 
+def test_station_id_avec_espaces():
+    assert normaliser_station_id(" S001 ") == "S001"
+
+def test_station_id_mauvais_format():
+    with pytest.raises(ValueError):
+        normaliser_station_id("S01")
+
+def test_station_id_trop_de_chiffres():
+    with pytest.raises(ValueError):
+        normaliser_station_id("S0001")
+
+def test_station_id_absent():
+    with pytest.raises(ValueError):
+        normaliser_station_id(None)
+
+def test_station_id_vide():
+    with pytest.raises(ValueError):
+        normaliser_station_id("")
 
 ###################################################Test sur normaliser_status###############################################################################
 

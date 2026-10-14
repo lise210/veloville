@@ -122,3 +122,11 @@ def normaliser_texte_obligatoire(valeur, longueur_max):
     if len(texte) > longueur_max:
         raise ValueError("Texte trop long")
     return texte
+
+def normaliser_station_id(station_id):
+    """Normalise un identifiant de station et vérifie son format"""
+    texte = normaliser_texte_obligatoire(station_id, 10)
+    station_id_normalise = texte.upper()
+    if re.fullmatch(r"S[0-9]{3}", station_id_normalise) is None:
+        raise ValueError("Identifiant de station non reconnu")
+    return station_id_normalise
