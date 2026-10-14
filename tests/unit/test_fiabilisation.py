@@ -5,7 +5,7 @@
 
 import pytest
 
-from api.services.fiabilisation import normaliser_statut, normaliser_velo_id, convertir_entier_positif, convertir_date, convertir_horodatage, verifier_dates_incident, verifier_cible_incident, verifier_reference_station, normaliser_texte_facultatif, normaliser_texte_obligatoire, normaliser_station_id
+from api.services.fiabilisation import normaliser_statut, normaliser_velo_id, convertir_entier_positif, convertir_date, convertir_horodatage, verifier_dates_incident, verifier_cible_incident, verifier_reference_station, normaliser_texte_facultatif, normaliser_texte_obligatoire, normaliser_station_id, normaliser_trajet_id
 from datetime import date, datetime
 
 
@@ -306,8 +306,31 @@ def test_station_id_vide():
     with pytest.raises(ValueError):
         normaliser_station_id("")
 
-###################################################Test sur normaliser_status###############################################################################
+###################################################Test sur normaliser_trajet_id###############################################################################
+def test_trajet_id_valide():
+    assert normaliser_trajet_id("T480001") == "T480001"
 
+def test_trajet_id_minuscules():
+    assert normaliser_trajet_id("t480001") == "T480001"
+
+def test_trajet_id_avec_espaces():
+    assert normaliser_trajet_id(" T480001 ") == "T480001"
+
+def test_trajet_id_mauvais_format():
+    with pytest.raises(ValueError):
+        normaliser_trajet_id("T48001")
+
+def test_trajet_id_trop_de_chiffres():
+    with pytest.raises(ValueError):
+        normaliser_trajet_id("T4800001")
+
+def test_trajet_id_absent():
+    with pytest.raises(ValueError):
+        normaliser_trajet_id(None)
+
+def test_trajet_id_vide():
+    with pytest.raises(ValueError):
+        normaliser_trajet_id("")
 
 ###################################################Test sur normaliser_status###############################################################################
 

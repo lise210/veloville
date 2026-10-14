@@ -130,3 +130,11 @@ def normaliser_station_id(station_id):
     if re.fullmatch(r"S[0-9]{3}", station_id_normalise) is None:
         raise ValueError("Identifiant de station non reconnu")
     return station_id_normalise
+
+def normaliser_trajet_id(trajet_id):
+    """Normalise un identifiant de trajet et vérifie son format"""
+    texte = normaliser_texte_obligatoire(trajet_id, 12)
+    trajet_id_normalise = texte.upper()
+    if re.fullmatch(r"T[0-9]{6}", trajet_id_normalise) is None:
+        raise ValueError("Identifiant de trajet non reconnu")
+    return trajet_id_normalise

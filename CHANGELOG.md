@@ -28,6 +28,8 @@ Une section par version, avec les changements regroupés en
 - Tests des textes valides, absents, vides et trop longs.
 - Normalisation et contrôle du format des identifiants de station.
 - Tests des identifiants de station valides, à normaliser et invalides.
+- Normalisation et contrôle du format des identifiants de trajet.
+- Tests des identifiants de trajet valides, à normaliser et invalides.
 
 
 
