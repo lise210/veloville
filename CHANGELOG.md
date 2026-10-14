@@ -3,6 +3,35 @@
 Une section par version, avec les changements regroupés en
 « Ajouté », « Modifié », « Corrigé ».
 
+## [0.0.5] - 2026-10-15
+
+### Ajouté
+- Modèle ORM Utilisateur.
+- Vérification des mots de passe avec bcrypt et gestion des JWT.
+- Dépendances d’authentification et de contrôle des rôles.
+- Route POST /auth/login et schémas de connexion.
+- Application FastAPI et route GET /sante.
+- Fixture TestClient et cinq tests d’API : santé, connexion des deux rôles, refus d’un mauvais mot de passe et d’un compte inconnu.
+- Route GET /stations/{station_id}, accessible aux deux rôles authentifiés.
+- Tests des accès sans jeton, avec jeton invalide et avec les deux rôles.
+- Fixtures fournissant les jetons exploitant et direction.
+- Route GET /stations avec filtre par commune et pagination côté serveur.
+- Taille de page par défaut de 20, bornée entre 1 et 100.
+- Tests de pagination, du filtre par commune et du refus des paramètres hors limites.
+- Route GET /trajets protégée, avec pagination et filtres par dates et station de départ ou d’arrivée.
+- Tests de pagination par défaut, des filtres et du refus d’accès sans jeton.
+- Route GET /incidents protégée, avec filtre par statut et pagination.
+- Tri des incidents du plus récent au plus ancien.
+- Tests de pagination, du filtre par statut et du refus d’accès sans jeton.
+- Route PUT /incidents/{`incident_id`}/statut réservée au rôle exploitant.
+- Contrôle des transitions autorisées et renseignement de la date de résolution.
+- Tests du refus de modification sans connexion (401) et avec le rôle direction (403).
+- Trois routes d’indicateurs protégées : activité par jour, stations actives et incidents par statut avec délai moyen de résolution.
+- Schémas de réponse et tests des trois routes sur les données importées.
+
+### Modifié
+- README actualisé : 169 tests réussis et couverture des services de 95 %.
+
 ## [0.0.4] - 2026-10-14
 
 ### Ajouté

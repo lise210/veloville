@@ -233,12 +233,14 @@ pytest --cov=api/services --cov-report=term-missing
 
 Cette commande exécute les tests et mesure la couverture. Le rapport indique également les lignes non exécutées.
 
-Résultat obtenu le 14/10/2026 :
-- 142 tests réussis : 134 tests de fiabilisation et 1 test de connexion et 7 tests des indicateurs
-- fiabilisation.py : 157 instructions, aucune non exécutée, soit 100 % de couverture.
-- indicateurs.py : 39 instructions, couverture de 100 %.
+Résultat obtenu le 15/10/2026 :
 
+- 169 tests réussis : 134 tests de fiabilisation, 1 test de connexion, 7 tests des calculs d’indicateurs et 27 tests d’API.
+- Couverture globale de api/services : 95 %, supérieure au minimum demandé de 60 %.
+- 260 instructions mesurées, dont 12 non exécutées dans le service incidents.
+- Le changement de statut réussi reste à vérifier pendant la recette.
 
+La couverture indique les instructions exécutées pendant les tests.
 
 ## Organisation du projet
 
