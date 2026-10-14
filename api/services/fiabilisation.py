@@ -209,3 +209,11 @@ def convertir_coordonnee(valeur, minimum, maximum):
     if coordonnee < minimum or coordonnee > maximum:
         raise ValueError("Coordonnée hors limites")
     return coordonnee
+
+def normaliser_cible(cible):
+    """Normalise la cible d'un incident et refuse les valeurs inconnues"""
+    texte = normaliser_texte_obligatoire(cible, 20)
+    cible_normalisee = texte.lower()
+    if cible_normalisee not in ["velo", "station"]:
+        raise ValueError("Cible non reconnue")
+    return cible_normalisee

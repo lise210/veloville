@@ -44,6 +44,8 @@ Une section par version, avec les changements regroupés en
 - Tests des catégories valides, inconnues, absentes et vides.
 - Conversion des coordonnées des stations et contrôle des limites géographiques.
 - Tests des coordonnées valides, absentes, non numériques et hors limites.
+- Normalisation des cibles vélo et station des incidents.
+- Tests des cibles valides, à normaliser, inconnues et absentes.
 
 ## [0.0.2] - 2026-10-14
 

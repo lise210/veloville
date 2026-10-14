@@ -5,7 +5,7 @@
 
 import pytest
 
-from api.services.fiabilisation import normaliser_statut, normaliser_velo_id, convertir_entier_positif, convertir_date, convertir_horodatage, verifier_dates_incident, verifier_cible_incident, verifier_reference_station, normaliser_texte_facultatif, normaliser_texte_obligatoire, normaliser_station_id, normaliser_trajet_id, normaliser_incident_id, normaliser_type_usager, normaliser_usager_ref, verifier_usager_ref, verifier_technicien, verifier_type_incident, convertir_coordonnee
+from api.services.fiabilisation import normaliser_statut, normaliser_velo_id, convertir_entier_positif, convertir_date, convertir_horodatage, verifier_dates_incident, verifier_cible_incident, verifier_reference_station, normaliser_texte_facultatif, normaliser_texte_obligatoire, normaliser_station_id, normaliser_trajet_id, normaliser_incident_id, normaliser_type_usager, normaliser_usager_ref, verifier_usager_ref, verifier_technicien, verifier_type_incident, convertir_coordonnee, normaliser_cible
 
 from datetime import date, datetime
 from decimal import Decimal, InvalidOperation
@@ -492,8 +492,27 @@ def test_coordonnee_absente():
     with pytest.raises(ValueError):
         convertir_coordonnee(None, -90, 90)
 
-###################################################Test sur normaliser_status###############################################################################
+###################################################Test sur normaliser_cible###############################################################################
+def test_cible_normalisee_velo():
+    assert normaliser_cible("velo") == "velo"
 
+def test_cible_normalisee_station():
+    assert normaliser_cible("station") == "station"
+
+def test_cible_majuscules_et_espaces():
+    assert normaliser_cible(" VELO ") == "velo"
+
+def test_normalisation_cible_inconnue():
+    with pytest.raises(ValueError):
+        normaliser_cible("autre")
+
+def test_normalisation_cible_absente():
+    with pytest.raises(ValueError):
+        normaliser_cible(None)
+
+def test_normalisation_cible_vide():
+    with pytest.raises(ValueError):
+        normaliser_cible("")
 
 ###################################################Test sur normaliser_status###############################################################################
 
