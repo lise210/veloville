@@ -29,6 +29,9 @@ Une section par version, avec les changements regroupés en
 - Trois routes d’indicateurs protégées : activité par jour, stations actives et incidents par statut avec délai moyen de résolution.
 - Schémas de réponse et tests des trois routes sur les données importées.
 
+### Modifié
+- README actualisé : 169 tests réussis et couverture des services de 95 %.
+
 ## [0.0.4] - 2026-10-14
 
 ### Ajouté
