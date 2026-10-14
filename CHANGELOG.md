@@ -24,6 +24,9 @@ Une section par version, avec les changements regroupés en
 - Tests des références connues, inconnues, absentes et du référentiel vide.
 - Normalisation des champs textuels facultatifs.
 - Tests des valeurs présentes, absentes, vides et composées d’espaces.
+- Contrôle des textes obligatoires et de leur longueur maximale.
+- Tests des textes valides, absents, vides et trop longs.
+
 
 
 ## [0.0.2] - 2026-10-14

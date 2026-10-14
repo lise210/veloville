@@ -114,3 +114,11 @@ def normaliser_texte_facultatif(valeur):
         return None
     return texte
 
+def normaliser_texte_obligatoire(valeur, longueur_max):
+    """Vérifie qu'un texte est présent et respecte la longueur maximale"""
+    texte = normaliser_texte_facultatif(valeur)
+    if texte is None:
+        raise ValueError("Texte obligatoire absent")
+    if len(texte) > longueur_max:
+        raise ValueError("Texte trop long")
+    return texte

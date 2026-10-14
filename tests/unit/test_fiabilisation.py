@@ -5,7 +5,7 @@
 
 import pytest
 
-from api.services.fiabilisation import normaliser_statut, normaliser_velo_id, convertir_entier_positif, convertir_date, convertir_horodatage, verifier_dates_incident, verifier_cible_incident, verifier_reference_station, normaliser_texte_facultatif
+from api.services.fiabilisation import normaliser_statut, normaliser_velo_id, convertir_entier_positif, convertir_date, convertir_horodatage, verifier_dates_incident, verifier_cible_incident, verifier_reference_station, normaliser_texte_facultatif, normaliser_texte_obligatoire
 from datetime import date, datetime
 
 
@@ -254,8 +254,31 @@ def test_texte_facultatif_vide():
 def test_texte_facultatif_uniquement_espaces():
     assert normaliser_texte_facultatif("   ") is None
 
-###################################################Test sur normaliser_status###############################################################################
+###################################################Test sur normaliser_texte_obligatoire###############################################################################
+def test_texte_obligatoire_valide():
+    assert normaliser_texte_obligatoire("Lille", 100) == "Lille"
 
+def test_texte_obligatoire_avec_espaces():
+    assert normaliser_texte_obligatoire(" Lille ", 100) == "Lille"
+
+def test_texte_obligatoire_longueur_limite():
+    assert normaliser_texte_obligatoire("Lille", 5) == "Lille"
+
+def test_texte_obligatoire_trop_long():
+    with pytest.raises(ValueError):
+        normaliser_texte_obligatoire("Lille", 4)
+
+def test_texte_obligatoire_absent():
+    with pytest.raises(ValueError):
+        normaliser_texte_obligatoire(None, 100)
+
+def test_texte_obligatoire_vide():
+    with pytest.raises(ValueError):
+        normaliser_texte_obligatoire("", 100)
+
+def test_texte_obligatoire_uniquement_espaces():
+    with pytest.raises(ValueError):
+        normaliser_texte_obligatoire("   ", 100)
 
 ###################################################Test sur normaliser_status###############################################################################
 
