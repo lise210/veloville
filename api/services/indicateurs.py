@@ -7,7 +7,7 @@ Les routeurs ne font qu'appeler ces fonctions.
 from sqlalchemy import select, func
 from sqlalchemy.orm import aliased
 
-from api.models import Trajet, Station
+from api.models import Trajet, Station, Incident
 
 def activite_par_jour(session, date_debut=None, date_fin=None):
     """Indicateur « activité par jour » : nombre de trajets par jour sur une période"""
@@ -60,4 +60,35 @@ def stations_actives(session, limite=10):
     return {"donnees": donnees}
 
 
-"""Indicateur « incidents par statut » : répartition des incidents et délai moyen de résolution"""
+
+def incidents_par_statut(session):
+    """Indicateur « incidents par statut » : répartition des incidents et délai moyen de résolution"""
+    requete_statuts = (select(Incident.statut, func.count(Incident.incident_id).label("nb_incidents"))
+        .group_by(Incident.statut)
+        .order_by(Incident.statut))
+
+    resultats = session.execute(requete_statuts).all()
+    donnees = []
+    for resultat in resultats:
+        donnees.append({
+            "statut": resultat.statut,
+            "nb_incidents": resultat.nb_incidents})
+
+    duree_heures = func.extract(
+        "epoch",  #dit uqe je veux la durée en seconde
+        Incident.date_resolution - Incident.date_signalement,
+    ) / 3600
+
+    requete_delai = (
+        select(func.round(func.avg(duree_heures), 1))
+        .where(Incident.statut == "resolu")
+        .where(Incident.date_resolution.is_not(None)))
+
+    delai = session.scalar(requete_delai)
+
+    if delai is not None:
+        delai = float(delai)
+
+    return {
+        "donnees": donnees,
+        "delai_moyen_resolution_heures": delai}

@@ -2,7 +2,7 @@ from datetime import date
 
 
 from api.database import SessionLocal
-from api.services.indicateurs import activite_par_jour, stations_actives
+from api.services.indicateurs import activite_par_jour, stations_actives, incidents_par_statut
 
 #####################################################Tests activite_par_jour##############
 def test_activite_par_jour_donnees_importees():
@@ -78,3 +78,16 @@ def test_stations_actives_limite_par_defaut():
 
     assert len(resultat["donnees"]) == 10
     assert resultat["donnees"][-1]["station_id"] == "S041"
+
+
+#####################################################Tests activite_par_jour##############
+def test_incidents_par_statut_donnees_importees():
+    with SessionLocal() as session:
+        resultat = incidents_par_statut(session)
+
+    assert resultat == {
+        "donnees": [
+            {"statut": "en_cours", "nb_incidents": 46},
+            {"statut": "ouvert", "nb_incidents": 55},
+            {"statut": "resolu", "nb_incidents": 76}],
+        "delai_moyen_resolution_heures": 129.4}
