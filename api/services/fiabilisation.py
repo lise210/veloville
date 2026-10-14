@@ -175,3 +175,9 @@ def verifier_usager_ref(type_usager, usager_ref):
     else:
         raise ValueError("Type d'usager non reconnu")
     return None
+
+def verifier_technicien(statut, technicien):
+    """Signale un technicien absent pour un incident pris en charge"""
+    if statut in ["en_cours", "resolu"] and technicien is None:
+        return "Technicien absent pour un incident pris en charge"
+    return None

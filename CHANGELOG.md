@@ -38,6 +38,9 @@ Une section par version, avec les changements regroupés en
 - Tests des pseudonymes valides, absents et au mauvais format.
 - Contrôle du pseudonyme selon le type d’usager.
 - Tests des cas acceptés, du rejet pour un occasionnel avec pseudonyme et de l’avertissement pour un abonné sans pseudonyme.
+- Signalement des techniciens absents pour les incidents en cours ou résolus.
+- Tests des avertissements liés à l’absence de technicien.
+
 
 
 ## [0.0.2] - 2026-10-14

@@ -5,7 +5,7 @@
 
 import pytest
 
-from api.services.fiabilisation import normaliser_statut, normaliser_velo_id, convertir_entier_positif, convertir_date, convertir_horodatage, verifier_dates_incident, verifier_cible_incident, verifier_reference_station, normaliser_texte_facultatif, normaliser_texte_obligatoire, normaliser_station_id, normaliser_trajet_id, normaliser_incident_id, normaliser_type_usager, normaliser_usager_ref, verifier_usager_ref
+from api.services.fiabilisation import normaliser_statut, normaliser_velo_id, convertir_entier_positif, convertir_date, convertir_horodatage, verifier_dates_incident, verifier_cible_incident, verifier_reference_station, normaliser_texte_facultatif, normaliser_texte_obligatoire, normaliser_station_id, normaliser_trajet_id, normaliser_incident_id, normaliser_type_usager, normaliser_usager_ref, verifier_usager_ref, verifier_technicien
 from datetime import date, datetime
 
 
@@ -419,9 +419,18 @@ def test_pseudonyme_type_usager_inconnu():
     with pytest.raises(ValueError):
         verifier_usager_ref("autre", None)
 
-###################################################Test sur normaliser_status###############################################################################
+###################################################Test sur verifier_technicien###############################################################################
+def test_technicien_present():
+    assert verifier_technicien("en_cours", "A. Diallo") is None
 
+def test_incident_ouvert_sans_technicien():
+    assert verifier_technicien("ouvert", None) is None
 
+def test_incident_en_cours_sans_technicien():
+    assert verifier_technicien("en_cours", None) == ("Technicien absent pour un incident pris en charge")
+
+def test_incident_resolu_sans_technicien():
+    assert verifier_technicien("resolu", None) == ("Technicien absent pour un incident pris en charge")
 
 ###################################################Test sur normaliser_status###############################################################################
 
