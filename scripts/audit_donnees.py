@@ -179,3 +179,163 @@ arrivees_invalides_uniques = (trajets_sans_doublons["station_arrivee"].notna() &
 lignes_a_rejeter = (durees_invalides_uniques | departs_invalides_uniques | arrivees_invalides_uniques)
 print(f"\nLignes à rejeter pour durée ou station invalide : {lignes_a_rejeter.sum()}")
 print(f"Lignes restantes après ces contrôles : {(~lignes_a_rejeter).sum()}")
+
+###########################################################################fin Stations###########################
+###########################################################################trajets###########################
+# Audit des incidents.
+print("\n--- AUDIT DES INCIDENTS ---")
+
+incidents = pd.read_csv("data/incidents.csv")
+
+print(incidents.head())
+print(f"Nombre de lignes : {incidents.shape[0]}")
+print(f"Nombre de colonnes : {incidents.shape[1]}")
+
+print(f"\nValeurs manquantes : {incidents.isna().sum()}")
+
+print(f"\nNombre de lignes dupliquées : {incidents.duplicated().sum()}")
+
+print(f"Nombre d'identifiants répétés : { incidents["incident_id"].duplicated().sum()}")
+
+# RG7 : observer les différentes écritures des statuts
+print(f"\nStatuts présents dans le CSV : {incidents["statut"].value_counts(dropna=False)}")
+
+"""Ouvert et ouvert 
+En cours, en cours et en_cours 
+RESOLU, Resolu et resolu."""
+#status en minuscules et remplace espace par underscore
+statuts_normalises = (
+    incidents["statut"]
+    .str.strip()
+    .str.lower()
+    .str.replace(" ", "_", regex=False))
+
+print(f"\nStatuts après normalisation : {statuts_normalises.value_counts(dropna=False)}")
+
+print(f"\nNombre de statuts à normaliser : {(incidents["statut"] != statuts_normalises).sum()}")
+
+# RG7 : seuls ces trois statuts sont autorisés.
+statuts_invalides = ~statuts_normalises.isin(["ouvert", "en_cours", "resolu"])
+
+print(f"\nStatuts invalides après normalisation : {statuts_invalides.sum()}")
+
+print(incidents.loc[statuts_invalides, ["incident_id", "statut"]])
+
+# RG6 : observer les cibles présentes
+print(f"\nCibles présentes dans le CSV : {incidents["cible"].value_counts(dropna=False)}")
+
+#RG6 : un incident vélo doit avoir uniquement une référence vélo
+incidents_velo_invalides = ((incidents["cible"] == "velo")
+    & (incidents["velo_id"].isna() | incidents["station_id"].notna()))
+print(f"\nIncidents vélo avec des références incorrectes : {incidents_velo_invalides.sum()}")
+print(incidents.loc[incidents_velo_invalides, ["incident_id", "cible", "velo_id", "station_id"]])
+
+# RG6 : un incident station doit avoir uniquement une référence station
+incidents_station_invalides = ((incidents["cible"] == "station")
+    & (incidents["station_id"].isna() | incidents["velo_id"].notna()))
+print(f"\nIncidents station avec des références incorrectes : {incidents_station_invalides.sum()}")
+print(incidents.loc[incidents_station_invalides, ["incident_id", "cible", "velo_id", "station_id"]])
+
+# RG6 : une station concernée doit exister dans le référentiel
+stations_incidents_inconnues = (incidents["station_id"].notna()
+    & ~incidents["station_id"].isin(stations["station_id"]))
+print(f"\nIncidents avec une station inconnue : {stations_incidents_inconnues.sum()}")
+print(incidents.loc[stations_incidents_inconnues, ["incident_id", "station_id"]])
+
+#format attendu : I2026- + 4 chiffres
+incident_id_valides = incidents["incident_id"].str.fullmatch(r"I2026-[0-9]{4}", na=False)
+incident_id_invalides = ~incident_id_valides
+print(f"\nIdentifiants d'incident au mauvais format : {incident_id_invalides.sum()}")
+print(incidents.loc[incident_id_invalides, ["incident_id"]])
+
+# Format attendu du vélo : V suivi de quatre chiffres.
+velos_incidents_valides = incidents["velo_id"].str.fullmatch(r"V[0-9]{4}", na=False)
+velos_incidents_invalides = (incidents["velo_id"].notna() & ~velos_incidents_valides)
+print(f"\nIdentifiants de vélo avec mauvais format : {velos_incidents_invalides.sum()}")
+print(incidents.loc[velos_incidents_invalides, ["incident_id", "velo_id"]])
+
+# RG8 : un incident résolu doit avoir une date de résolution
+resolus_sans_date = ((statuts_normalises == "resolu") & incidents["date_resolution"].isna())
+print(f"\nIncidents résolus sans date de résolution : {resolus_sans_date.sum()}")
+print(incidents.loc[resolus_sans_date, ["incident_id", "statut", "date_resolution"]])
+
+# RG8 : un incident non résolu ne doit pas avoir de date de résolution
+non_resolus_avec_date = ((statuts_normalises != "resolu") & incidents["date_resolution"].notna())
+print(f"\nIncidents non résolus avec une date de résolution : {non_resolus_avec_date.sum()}")
+print(incidents.loc[non_resolus_avec_date, ["incident_id", "statut", "date_resolution"]])
+
+# Date de signalement attendue : AAAA-MM-JJ HH:MM
+dates_signalement = pd.to_datetime(incidents["date_signalement"], format="%Y-%m-%d %H:%M", errors="coerce")
+print(f"\nDates de signalement impossibles ou non reconnues : {dates_signalement.isna().sum()}")
+print(incidents.loc[dates_signalement.isna(), ["incident_id", "date_signalement"]])
+
+# Date de résolution attendue : AAAA-MM-JJ HH:MM
+dates_resolution = pd.to_datetime(incidents["date_resolution"], format="%Y-%m-%d %H:%M", errors="coerce")
+
+# Une date absente est autorisée pour un incident non résolu
+dates_resolution_invalides = (incidents["date_resolution"].notna() & dates_resolution.isna())
+print(f"\nDates de résolution renseignées mais impossibles ou non reconnues : {dates_resolution_invalides.sum()}")
+print(incidents.loc[dates_resolution_invalides, ["incident_id", "date_resolution"]])
+
+# RG8 : pas date résolution avant date signalement
+resolutions_avant_signalement = (dates_resolution.notna() & dates_signalement.notna() & (dates_resolution < dates_signalement))
+print(f"\nDates de résolution antérieures au signalement : {resolutions_avant_signalement.sum()}")
+print(incidents.loc[resolutions_avant_signalement, ["incident_id", "date_signalement", "date_resolution"]])
+
+# RG8 : technicien attendu pour un incident en cours ou résolu
+techniciens_manquants = (statuts_normalises.isin(["en_cours", "resolu"]) & (incidents["technicien"].fillna("").str.strip() == ""))
+print(f"\nIncidents pris en charge sans technicien : {techniciens_manquants.sum()}")
+print(incidents.loc[techniciens_manquants, ["incident_id", "statut", "technicien"]])
+
+# Catégories prévues dans README-donnees.md
+types_autorises = [
+    "vandalisme",
+    "selle abimee",
+    "eclairage HS",
+    "chaine deraillee",
+    "ecran borne illisible",
+    "pneu creve",
+    "frein defectueux",
+    "borne hors service"]
+types_incident_invalides = ~incidents["type_incident"].isin(types_autorises)
+print(f"\nTypes d'incident absents ou non reconnus : {types_incident_invalides.sum()}")
+print(incidents.loc[types_incident_invalides, ["incident_id", "type_incident"]])
+
+# Format attendu : AAAA-MM-JJ HH:MM
+formats_signalement_valides = incidents["date_signalement"].str.fullmatch(r"[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}", na=False)
+print(f"\nDates de signalement au mauvais format : {(~formats_signalement_valides).sum()}")
+print(incidents.loc[~formats_signalement_valides, ["incident_id", "date_signalement"]])
+
+# Format attendu : AAAA-MM-JJ HH:MM
+formats_resolution_valides = incidents["date_resolution"].str.fullmatch(r"[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}", na=False)
+formats_resolution_invalides = (incidents["date_resolution"].notna() & ~formats_resolution_valides)
+print(f"\nDates de résolution renseignées au mauvais format : {formats_resolution_invalides.sum()}")
+print(incidents.loc[formats_resolution_invalides, ["incident_id", "date_resolution"]])
+
+#type incident obligatoire et limité à 100 caractères
+types_textes = incidents["type_incident"].fillna("").astype(str)
+print(f"\nTypes d'incident vides : {(types_textes.str.strip() == "").sum()}")
+print(f"Types d'incident dépassant 100 caractères : {(types_textes.str.len() > 100).sum()}")
+
+# Le technicien peut être absent, mais son nom est limité à 100 caractères
+techniciens_textes = incidents["technicien"].fillna("").astype(str)
+print(f"Noms de technicien dépassant 100 caractères : {(techniciens_textes.str.len() > 100).sum()}")
+
+# Une ligne est rejetée si au moins un contrôle bloquant échoue
+incidents_a_rejeter = (statuts_invalides
+                        | incidents_velo_invalides
+                        | incidents_station_invalides
+                        | stations_incidents_inconnues
+                        | incident_id_invalides
+                        | velos_incidents_invalides
+                        | resolus_sans_date
+                        | non_resolus_avec_date
+                        | dates_signalement.isna()
+                        | dates_resolution_invalides
+                        | resolutions_avant_signalement
+                        | types_incident_invalides
+                        | (types_textes.str.strip() == "")
+                        | (types_textes.str.len() > 100)
+                        | (techniciens_textes.str.len() > 100))
+print(f"\nIncidents à rejeter : {incidents_a_rejeter.sum()}")
+print(f"Incidents restants : {(~incidents_a_rejeter).sum()}")

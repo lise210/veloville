@@ -180,9 +180,15 @@ Le fichier contient 120 lignes et 7 colonnes.
 | Latitude hors des limites -90 à 90 | 0 | Aucune correction nécessaire |
 | Longitude hors des limites -180 à 180 | 0 | Aucune correction nécessaire |
 
-Les coordonnées sont numériques et dans les limites géographiques.
 
-Certaines sont écrites avec moins de cinq décimales : elles sont conservées, car l’ajout de zéros ne change pas leur valeur.
+Bilan prévisionnel :
+120 lignes conservées + 0 rejet + 0 doublon écarté = 120 lignes.
+
+Les coordonnées écrites avec moins de cinq décimales sont conservées :
+leur stockage dans NUMERIC(8,5) ne change pas leur valeur.
+
+Ces résultats seront confirmés lors de l’import.
+Aucune station n’a encore été chargée dans PostgreSQL.
 
 ### trajets.csv
 
@@ -226,4 +232,56 @@ Aucun trajet n’a encore été chargé dans PostgreSQL.
 
 ### incidents.csv
 
-Audit à réaliser.
+Le fichier contient 180 lignes et 9 colonnes.
+Les comptages portent sur le CSV brut.
+
+| Défaut ou contrôle | Nombre de lignes concernées | Traitement retenu |
+|---|---:|---|
+| Lignes identiques ou identifiants répétés | 0 | Aucun doublon à écarter |
+| Statut écrit différemment du format attendu | 125 | Normaliser en ouvert, en_cours ou resolu et journaliser |
+| Statut inconnu après normalisation | 0 | Aucune correction nécessaire |
+| Cible différente de velo ou station | 0 | Aucune correction nécessaire |
+| Références vélo/station incohérentes avec la cible | 0 | Aucune correction nécessaire |
+| Station renseignée mais inconnue | 0 | Aucune correction nécessaire |
+| Identifiant d’incident au mauvais format | 0 | Aucune correction nécessaire |
+| Identifiant de vélo renseigné au mauvais format | 0 | Aucune correction nécessaire |
+| Incident résolu sans date de résolution | 0 | Aucune correction nécessaire |
+| Incident non résolu avec une date de résolution | 0 | Aucune correction nécessaire |
+| Date de signalement impossible ou au mauvais format | 0 | Aucune correction nécessaire |
+| Date de résolution renseignée impossible ou au mauvais format | 0 | Aucune correction nécessaire |
+| Résolution antérieure au signalement | 3 | Rejeter et journaliser, sans inventer une date corrigée |
+| Technicien absent pour un incident en cours ou résolu | 25 | Signaler dans le journal sans rejeter pour ce motif |
+| Type d’incident absent ou non reconnu | 0 | Aucune correction nécessaire |
+| Type d’incident ou nom de technicien dépassant 100 caractères | 0 | Aucune correction nécessaire |
+
+Les incidents à rejeter sont I2026-0028, I2026-0124 et I2026-0178.
+
+Après normalisation, nous avons :
+55 ouvert, 46 en_cours et 79 resolu.
+Ces nombres incluent les incidents qui seront rejetés.
+
+Bilan prévisionnel :
+177 lignes conservées + 3 rejets + 0 doublon écarté = 180 lignes.
+
+Les normalisations et avertissements ne sont pas des rejets.
+Une ligne peut recevoir plusieurs messages dans le journal.
+
+Ces résultats seront confirmés lors de l’import.
+Aucun incident n’a encore été chargé dans PostgreSQL.
+
+### Conclusion de l’audit
+
+Les trois exports CSV ont été examinés avec Python et Pandas,
+à l’aide du script `scripts/audit_donnees.py`, sans modifier
+les fichiers sources ni charger leurs données dans PostgreSQL.
+
+L’audit a permis de repérer les doublons, les valeurs à normaliser,
+les lignes à rejeter et les informations absentes autorisées.
+
+Après application des traitements prévus, les volumes attendus sont :
+- 120 stations ;
+- 2 002 trajets ;
+- 177 incidents.
+
+Ces volumes seront vérifiés après l’import. Les doublons écartés,
+les rejets, les normalisations et les avertissements seront journalisés.

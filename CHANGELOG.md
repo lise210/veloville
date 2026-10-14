@@ -12,6 +12,7 @@ Une section par version, avec les changements regroupés en
 - Script d’audit des exports CSV.
 - Résultats de l’audit des stations dans docs/schema-donnees.md.
 - Résultats de l’audit des trajets dans docs/schema-donnees.md.
+- Résultats de l’audit des incidents dans docs/schema-donnees.md.
 
 ### Modifié
 - README complété avec la création des tables et le chargement des comptes.
