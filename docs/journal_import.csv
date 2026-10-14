@@ -11,3 +11,19 @@ trajets.csv,T481636,trajet_id,T481636,Ligne strictement identique déjà traité
 trajets.csv,T481776,trajet_id,T481776,Ligne strictement identique déjà traitée,doublon
 trajets.csv,T481834,trajet_id,T481834,Ligne strictement identique déjà traitée,doublon
 trajets.csv,T481927,trajet_id,T481927,Ligne strictement identique déjà traitée,doublon
+trajets.csv,T480030,station_arrivee,S999,Station inconnue,rejet
+trajets.csv,T480034,station_arrivee,S999,Station inconnue,rejet
+trajets.csv,T480152,station_arrivee,S999,Station inconnue,rejet
+trajets.csv,T480235,station_arrivee,S999,Station inconnue,rejet
+trajets.csv,T480596,duree_secondes,-120,Valeur non positive,rejet
+trajets.csv,T480712,duree_secondes,-45,Valeur non positive,rejet
+trajets.csv,T480858,station_arrivee,S999,Station inconnue,rejet
+trajets.csv,T480899,duree_secondes,-45,Valeur non positive,rejet
+trajets.csv,T480924,duree_secondes,-120,Valeur non positive,rejet
+trajets.csv,T481067,duree_secondes,0,Valeur non positive,rejet
+trajets.csv,T481074,duree_secondes,0,Valeur non positive,rejet
+trajets.csv,T481274,duree_secondes,0,Valeur non positive,rejet
+trajets.csv,T481464,station_arrivee,S999,Station inconnue,rejet
+trajets.csv,T481688,duree_secondes,-120,Valeur non positive,rejet
+trajets.csv,T481717,station_arrivee,S999,Station inconnue,rejet
+trajets.csv,T481846,duree_secondes,-45,Valeur non positive,rejet

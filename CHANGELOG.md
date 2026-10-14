@@ -52,6 +52,8 @@ Une section par version, avec les changements regroupés en
 - Séparation des doublons de trajets avec la fonction `separer_doublons` déjà testée.
 - Fiabilisation des stations avec les fonctions testées.
 - Création du journal d’import et traçabilité des doublons de trajets.
+- Fiabilisation des trajets avec les fonctions testées.
+- Conservation des trajets valides et journalisation des rejets.
 
 
 ## [0.0.2] - 2026-10-14

@@ -13,7 +13,7 @@ Usage actuel : python -m scripts.importer
 import pandas as pd 
 from decimal import InvalidOperation
 
-from api.services.fiabilisation import separer_doublons, normaliser_station_id, normaliser_texte_obligatoire, convertir_coordonnee, convertir_date, convertir_entier_positif
+from api.services.fiabilisation import separer_doublons, normaliser_station_id, normaliser_texte_obligatoire, convertir_coordonnee, convertir_date, convertir_entier_positif, normaliser_trajet_id, normaliser_velo_id, convertir_horodatage, verifier_reference_station, normaliser_texte_facultatif, normaliser_type_usager, normaliser_usager_ref, verifier_usager_ref
 
 def main() -> None:
     #keep_default_na=False : garde les champs vides comme ""
@@ -47,6 +47,7 @@ def main() -> None:
             "motif": "Ligne strictement identique déjà traitée",
             "decision": "doublon"})
 
+    #boucle station
     for ligne in lignes_stations:
         try:
             colonne = "station_id"
@@ -63,7 +64,6 @@ def main() -> None:
             longitude = convertir_coordonnee(ligne[colonne], -180, 180)
             colonne = "date_mise_en_service"
             date_mise_en_service = convertir_date(ligne[colonne])
-
             stations_valides.append({
                 "station_id": station_id,
                 "nom": nom,
@@ -88,6 +88,66 @@ def main() -> None:
             print(f"Station refusée : {ligne['station_id']} - {erreur}")
 
     print("Stations valides :", len(stations_valides))
+    # id des stations ayant passé tous les contrôles
+    stations_connues = []
+    for station in stations_valides:
+        stations_connues.append(station["station_id"])
+    print("Stations dans le référentiel :", len(stations_connues))
+
+    # Contrôle des trajets sans doublons.
+    trajets_valides = []
+    for ligne in trajets_uniques:
+        try:
+            colonne = "trajet_id"
+            trajet_id = normaliser_trajet_id(ligne[colonne])
+            colonne = "velo_id"
+            velo_id = normaliser_velo_id(ligne[colonne])
+            colonne = "depart_horodatage"
+            depart_horodatage = convertir_horodatage(ligne[colonne])
+            colonne = "station_depart"
+            station_depart = normaliser_station_id(ligne[colonne])
+            verifier_reference_station(station_depart, stations_connues)  
+            colonne = "station_arrivee"
+            station_arrivee = normaliser_texte_facultatif(ligne[colonne])
+            if station_arrivee is not None:
+                station_arrivee = normaliser_station_id(station_arrivee)
+                verifier_reference_station(station_arrivee, stations_connues)  
+            colonne = "duree_secondes"
+            duree_secondes = convertir_entier_positif(ligne[colonne])
+            colonne = "type_usager"
+            type_usager = normaliser_type_usager(ligne[colonne])
+            colonne = "usager_ref"
+            usager_ref = normaliser_usager_ref(ligne[colonne])
+            avertissement = verifier_usager_ref(type_usager, usager_ref)
+            if avertissement is not None:
+                journal.append({
+                    "fichier_source": "trajets.csv",
+                    "identifiant": ligne["trajet_id"],
+                    "colonne": colonne,
+                    "valeur": ligne[colonne],
+                    "motif": avertissement,
+                    "decision": "avertissement"})
+            trajets_valides.append({
+                "trajet_id": trajet_id,
+                "velo_id": velo_id,
+                "depart_horodatage": depart_horodatage,
+                "station_depart": station_depart,
+                "station_arrivee": station_arrivee,
+                "duree_secondes": duree_secondes,
+                "type_usager": type_usager,
+                "usager_ref": usager_ref})
+        except ValueError as erreur:
+            journal.append({
+                "fichier_source": "trajets.csv",
+                "identifiant": ligne["trajet_id"],
+                "colonne": colonne,
+                "valeur": ligne[colonne],
+                "motif": str(erreur),
+                "decision": "rejet"})
+            print(f"Trajet refusé : {ligne['trajet_id']} - {erreur}")
+   
+    print("Trajets valides :", len(trajets_valides))
+   
     print("Messages dans le journal :", len(journal))
 
     colonnes_journal = [
