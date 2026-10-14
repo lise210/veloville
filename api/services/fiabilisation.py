@@ -28,3 +28,15 @@ def normaliser_velo_id(velo_id):
     if re.fullmatch(r"V[0-9]{4}", velo_id_normalise) is None:
         raise ValueError("Identifiant de vélo non reconnu")
     return velo_id_normalise
+
+def convertir_entier_positif(valeur):
+    """Convertit une valeur du CSV en entier strictement positif"""
+    if valeur is None:
+        raise ValueError("Valeur absente")
+    texte = str(valeur).strip()
+    if re.fullmatch(r"[+-]?[0-9]+", texte) is None:
+        raise ValueError("Valeur non entière")
+    entier = int(texte)
+    if entier <= 0:
+        raise ValueError("Valeur non positive")
+    return entier

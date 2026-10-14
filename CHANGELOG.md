@@ -10,6 +10,8 @@ Une section par version, avec les changements regroupés en
 - Tests unitaires des statuts valides, à normaliser, inconnus et absents.
 - Fonction de normalisation et de contrôle des identifiants de vélo.
 - Tests unitaires des identifiants de vélo.
+- Fonction de conversion et de contrôle des entiers strictement positifs.
+- Tests unitaires des capacités et durées : valeurs valides, nulles, négatives, décimales, non numériques et absentes.
 
 
 ## [0.0.2] - 2026-10-14
