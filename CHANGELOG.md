@@ -8,7 +8,8 @@ Une section par version, avec les changements regroupés en
 ### Ajouté
 - Indicateur d’activité par jour, calculé dans PostgreSQL avec SQLAlchemy.
 - Tests d’intégration des comptages, des bornes inclusives, d’une période vide et de l’absence de filtre.
-
+- Indicateur des stations les plus actives, classées par total de mouvements.
+- Tests du classement, des comptages, des égalités et de la limite par défaut.
 
 
 ## [0.0.3] - 2026-10-14
