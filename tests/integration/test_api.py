@@ -97,3 +97,73 @@ def test_station_token_invalide(client):
 
     assert reponse.status_code == 401
     assert reponse.json() == {"detail": "Token invalide"}
+
+
+def test_stations_pagination_par_defaut(client, exploitant_token):
+    """Vérifie la première page des stations"""
+    reponse = client.get("/stations",
+        headers={"Authorization": f"Bearer {exploitant_token}"})
+
+    assert reponse.status_code == 200
+    contenu = reponse.json()
+    assert contenu["total"] == 120
+    assert contenu["page"] == 1
+    assert contenu["taille_page"] == 20
+    assert len(contenu["resultats"]) == 20
+    assert contenu["resultats"][0]["station_id"] == "S001"
+
+
+def test_stations_deuxieme_page(client, exploitant_token):
+    """Vérifie le passage à la deuxième page."""
+    reponse = client.get("/stations",
+        params={"page": 2, "taille_page": 20},
+        headers={"Authorization": f"Bearer {exploitant_token}"})
+
+    assert reponse.status_code == 200
+    contenu = reponse.json()
+    assert contenu["total"] == 120
+    assert contenu["page"] == 2
+    assert contenu["taille_page"] == 20
+    assert len(contenu["resultats"]) == 20
+    assert contenu["resultats"][0]["station_id"] == "S021"
+
+
+def test_stations_filtre_commune(client, exploitant_token):
+    """Vérifie que seules les stations de Lille sont renvoyées"""
+    reponse = client.get("/stations",
+        params={"commune": "Lille", "taille_page": 100},
+        headers={"Authorization": f"Bearer {exploitant_token}"})
+
+    assert reponse.status_code == 200
+    contenu = reponse.json()
+    assert contenu["total"] > 0
+    assert len(contenu["resultats"]) == contenu["total"]
+    for station in contenu["resultats"]:
+        assert station["commune"] == "Lille"
+
+
+def test_stations_page_invalide(client, exploitant_token):
+    """Vérifie qu'une page inférieure à 1 est refusée."""
+    reponse = client.get("/stations",
+        params={"page": 0},
+        headers={"Authorization": f"Bearer {exploitant_token}"})
+
+    assert reponse.status_code == 422
+
+
+def test_stations_taille_page_trop_grande(client, exploitant_token):
+    """Vérifie qu'une taille de page supérieure à 100 est refusé."""
+    reponse = client.get("/stations",
+        params={"taille_page": 101},
+        headers={"Authorization": f"Bearer {exploitant_token}"})
+
+    assert reponse.status_code == 422
+
+
+def test_stations_taille_page_nulle(client, exploitant_token):
+    """Vérifie qu'une taille de page égale à zéro est refusée"""
+    reponse = client.get("/stations",
+        params={"taille_page": 0},
+        headers={"Authorization": f"Bearer {exploitant_token}"})
+
+    assert reponse.status_code == 422

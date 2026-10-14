@@ -32,3 +32,11 @@ class StationResponse(BaseModel):
     latitude: Decimal
     longitude: Decimal
     date_mise_en_service: date
+
+
+class StationsPagineesResponse(BaseModel):
+    """Une page de stations et ses informations de pagination"""
+    total: int
+    page: int
+    taille_page: int
+    resultats: list[StationResponse]
