@@ -7,3 +7,13 @@ doublons. Chaque fonction retourne la valeur normalisée ou signale le
 motif de rejet. Ces fonctions sont appelées par scripts/importer.py et
 couvertes par tests/unit/.
 """
+
+def normaliser_statut(statut):
+    """Normalise un statut et refuse les valeurs inconnues"""
+    if statut is None:
+        raise ValueError("Statut absent")
+    statut_normalise = statut.strip().lower().replace(" ", "_")
+    if statut_normalise not in ["ouvert", "en_cours", "resolu"]:
+        raise ValueError("Statut non reconnu")
+    return statut_normalise
+
