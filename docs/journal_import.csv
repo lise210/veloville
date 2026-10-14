@@ -1,0 +1,13 @@
+fichier_source,identifiant,colonne,valeur,motif,decision
+trajets.csv,T480073,trajet_id,T480073,Ligne strictement identique déjà traitée,doublon
+trajets.csv,T480078,trajet_id,T480078,Ligne strictement identique déjà traitée,doublon
+trajets.csv,T480288,trajet_id,T480288,Ligne strictement identique déjà traitée,doublon
+trajets.csv,T480293,trajet_id,T480293,Ligne strictement identique déjà traitée,doublon
+trajets.csv,T480596,trajet_id,T480596,Ligne strictement identique déjà traitée,doublon
+trajets.csv,T480847,trajet_id,T480847,Ligne strictement identique déjà traitée,doublon
+trajets.csv,T480945,trajet_id,T480945,Ligne strictement identique déjà traitée,doublon
+trajets.csv,T481625,trajet_id,T481625,Ligne strictement identique déjà traitée,doublon
+trajets.csv,T481636,trajet_id,T481636,Ligne strictement identique déjà traitée,doublon
+trajets.csv,T481776,trajet_id,T481776,Ligne strictement identique déjà traitée,doublon
+trajets.csv,T481834,trajet_id,T481834,Ligne strictement identique déjà traitée,doublon
+trajets.csv,T481927,trajet_id,T481927,Ligne strictement identique déjà traitée,doublon

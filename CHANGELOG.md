@@ -50,6 +50,8 @@ Une section par version, avec les changements regroupés en
 - Tests des répétitions, des lignes différentes et de la liste vide.
 - Lecture des trois CSV avec Pandas dans scripts/importer.py.
 - Séparation des doublons de trajets avec la fonction `separer_doublons` déjà testée.
+- Fiabilisation des stations avec les fonctions testées.
+- Création du journal d’import et traçabilité des doublons de trajets.
 
 
 ## [0.0.2] - 2026-10-14
