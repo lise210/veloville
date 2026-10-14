@@ -5,7 +5,7 @@
 
 import pytest
 
-from api.services.fiabilisation import normaliser_statut, normaliser_velo_id, convertir_entier_positif, convertir_date, convertir_horodatage, verifier_dates_incident, verifier_cible_incident, verifier_reference_station, normaliser_texte_facultatif, normaliser_texte_obligatoire, normaliser_station_id, normaliser_trajet_id, normaliser_incident_id, normaliser_type_usager, normaliser_usager_ref, verifier_usager_ref, verifier_technicien
+from api.services.fiabilisation import normaliser_statut, normaliser_velo_id, convertir_entier_positif, convertir_date, convertir_horodatage, verifier_dates_incident, verifier_cible_incident, verifier_reference_station, normaliser_texte_facultatif, normaliser_texte_obligatoire, normaliser_station_id, normaliser_trajet_id, normaliser_incident_id, normaliser_type_usager, normaliser_usager_ref, verifier_usager_ref, verifier_technicien, verifier_type_incident
 from datetime import date, datetime
 
 
@@ -432,9 +432,27 @@ def test_incident_en_cours_sans_technicien():
 def test_incident_resolu_sans_technicien():
     assert verifier_technicien("resolu", None) == ("Technicien absent pour un incident pris en charge")
 
-###################################################Test sur normaliser_status###############################################################################
+###################################################Test sur verifier_type_incident###############################################################################
+def test_type_incident_valide():
+    assert verifier_type_incident("vandalisme") == "vandalisme"
 
+def test_type_incident_eclairage():
+    assert verifier_type_incident("eclairage HS") == "eclairage HS"
 
+def test_type_incident_avec_espaces():
+    assert verifier_type_incident(" pneu creve ") == "pneu creve"
+
+def test_type_incident_inconnu():
+    with pytest.raises(ValueError):
+        verifier_type_incident("autre panne")
+
+def test_type_incident_absent():
+    with pytest.raises(ValueError):
+        verifier_type_incident(None)
+
+def test_type_incident_vide():
+    with pytest.raises(ValueError):
+        verifier_type_incident("")
 
 ###################################################Test sur normaliser_status###############################################################################
 

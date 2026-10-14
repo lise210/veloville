@@ -181,3 +181,19 @@ def verifier_technicien(statut, technicien):
     if statut in ["en_cours", "resolu"] and technicien is None:
         return "Technicien absent pour un incident pris en charge"
     return None
+
+def verifier_type_incident(type_incident):
+    """Vérifie que la catégorie d'incident est autorisée"""
+    texte = normaliser_texte_obligatoire(type_incident, 100)
+    types_autorises = [
+        "vandalisme",
+        "selle abimee",
+        "eclairage HS",
+        "chaine deraillee",
+        "ecran borne illisible",
+        "pneu creve",
+        "frein defectueux",
+        "borne hors service"]
+    if texte not in types_autorises:
+        raise ValueError("Type d'incident non reconnu")
+    return texte
