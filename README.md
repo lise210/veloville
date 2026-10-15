@@ -261,7 +261,7 @@ Cette commande exécute les tests et mesure la couverture. Le rapport indique é
 
 Résultat obtenu le 15/10/2026 :
 
-- 170 tests réussis : 134 tests de fiabilisation, 1 test de connexion, 7 tests des calculs d’indicateurs et 28 tests d’API.
+- 173 tests réussis : 134 tests unitaires de fiabilisation, 3 tests unitaires des réponses des indicateurs, 1 test de connexion, 7 tests d’intégration des indicateurs et 28 tests d’API.
 - Couverture globale de api/services : 95 %, supérieure au minimum demandé de 60 %.
 - 260 instructions mesurées, dont 12 non exécutées dans le service incidents.
 - Changement de statut vérifié manuellement depuis Streamlit sur un incident temporaire : `ouvert` --> `en_cours` --> `resolu`, avec date de résolution automatique.
