@@ -3,7 +3,7 @@
 Une section par version, avec les changements regroupés en
 « Ajouté », « Modifié », « Corrigé ».
 
-## [Non livré]
+## [0.0.6] - 2026-10-15
 
 ### Ajouté
 - Client HTTP centralisé avec jeton Bearer, délai maximal et messages d’erreur en français.
