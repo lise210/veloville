@@ -1,12 +1,23 @@
 #!/usr/bin/env bash
-# Sauvegarde horodatée de la base veloville avec pg_dump.
-# À compléter :
-#   - charger les variables de connexion depuis .env (sans les afficher) ;
-#   - produire sauvegardes/veloville_AAAAMMJJ_HHMMSS.dump (format custom -Fc)
-#     ou .sql.gz ;
-#   - quitter avec un code de retour non nul en cas d'échec ;
-#   - documenter la commande de restauration dans docs/procedure-deploiement.md.
-set -euo pipefail
 
-echo "À compléter" >&2
-exit 1
+#arrête si une commande échoue
+set -e
+
+# se placer à la racine du projet
+cd "$(dirname "$0")/.."
+
+# Lire la connexion depuis .env
+connexion=$(python -c "import os; from dotenv import load_dotenv; load_dotenv('.env'); print(os.environ['DATABASE_URL'], end='')")
+
+# Adapter l'URL pour pg_dump
+connexion="${connexion/postgresql+psycopg:/postgresql:}"
+
+# créer le dossier 
+mkdir -p sauvegardes
+fichier="sauvegardes/veloville_$(date +%Y%m%d_%H%M%S).dump"
+
+# sauvegarder : -Fc correspond au format custom
+pg_dump --no-password -Fc --file="$fichier" --dbname="$connexion"
+
+echo "Sauvegarde créée : $fichier"
+

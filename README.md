@@ -411,10 +411,6 @@ Les deux anomalies de messages HTTP ont été corrigées et les cas REC-06 et RE
 Les résultats consolidés sont de 10 cas OK.
 Les résultats détaillés, les limites de traçabilité et le procès-verbal se trouvent dans `docs/recette/resultats-recette.md`
 
-## Étapes restantes
-
-- Compléter le script de sauvegarde demandé. La sauvegarde et la restauration n’ont pas été vérifiées. N'a pas été vu en formation, cette partie reste à réaliser avant l'oral final (je me renseignerai sur le sujet).
-- finalisation de la documentation et livraison.
 
 ## Auteur
 
