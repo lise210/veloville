@@ -187,3 +187,63 @@ Les essais antérieurs restent identifiés dans le relevé initial.
 Deux anomalies corrigées et rejouées avec succès :
 - ANO-001 : fermée après rejeu de REC-06.
 - ANO-002 : fermée après rejeu de REC-08.
+
+## Axes d’amélioration
+
+- Utiliser une base dédiée aux tests pour éviter de modifier les données utilisées par l’application.
+- Conserver dès chaque essai la date, la version testée et les fichiers de preuve pour faciliter le suivi.
+- Réinitialiser automatiquement la pagination lors d’un changement de filtre, afin d’éviter de rester sur une page sans résultat.
+
+
+## Procès-verbal de recette — VéloVille V1
+
+### 1. Identification
+
+Application : VéloVille.
+Version initiale de la campagne : 97da69b.
+Version des corrections et des rejeux : babea35.
+Date de clôture des rejeux : 15/10/2026.
+
+Environnement : Windows, Python 3.14.7, PostgreSQL 18,
+API FastAPI et interface Streamlit exécutées localement.
+
+Exécution des vérifications : Lise, développeuse.
+Comptes utilisés : exploitant01 et direction01.
+
+### 2. Périmètre recetté
+
+Cas REC-01 à REC-10 du plan fourni.
+
+Les cas REC-06 et REC-08 ont été rejoués après correction.
+
+### 3. Résultats
+
+Relevé initial : 8 OK, 2 KO, 0 NT.
+
+Résultats consolidés après corrections : 10 OK, 0 KO, 0 NT.
+
+Deux anomalies mineures relevées :
+- ANO-001 : message 403, corrigée et fermée.
+- ANO-002 : message 404, corrigée et fermée.
+
+Vérification automatisée : 170 tests réussis.
+Couverture des services : 95 %.
+
+### 4. Réserves bloquantes
+
+Aucune anomalie bloquante constatée dans les cas exécutés.
+
+### 5. Réserves non bloquantes
+
+Références des preuves et versions exactes lorsqu’elles sont disponibles.
+
+### 6. Décision proposée
+
+Les dix cas sont déclarés conformes après les corrections.
+La réserve porte sur les preuves (oublie de garder des captures d'écran).
+
+
+### 7. Validation
+
+Développeuse : Lise - 15/10/2026.
+Commanditaire : validation non recueillie.
