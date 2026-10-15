@@ -20,6 +20,9 @@ Une section par version, avec les changements regroupés en
 - Trois métriques et trois tableaux.
 - Vérifications manuelles des résultats, du filtre de dates et d’une période sans trajet.
 
+### Corrigé
+- Restauration de l’état initial d’un incident modifié pendant les essais manuels. Vérification complète : 169 tests réussis, couverture des services de 95 %.
+
 ## [0.0.5] - 2026-10-15
 
 ### Ajouté
