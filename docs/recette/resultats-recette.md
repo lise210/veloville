@@ -193,6 +193,7 @@ Deux anomalies corrigées et rejouées avec succès :
 - Utiliser une base dédiée aux tests pour éviter de modifier les données utilisées par l’application.
 - Conserver dès chaque essai la date, la version testée et les fichiers de preuve pour faciliter le suivi.
 - Réinitialiser automatiquement la pagination lors d’un changement de filtre, afin d’éviter de rester sur une page sans résultat.
+- Compléter le script de sauvegarde demandé. La sauvegarde et la restauration n’ont pas été vérifiées. N'a pas été vu en formation, cette partie reste à réaliser avant l'oral final (je me renseignerai sur le sujet).
 
 
 ## Procès-verbal de recette — VéloVille V1
