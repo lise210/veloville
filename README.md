@@ -194,6 +194,28 @@ Il contient 192 messages sur les données fournies :
 Un message de normalisation ou d’avertissement ne signifie pas
 que la ligne est rejetée.
 
+## Lancer l’API et l’interface
+
+Depuis la racine du projet, avec l’environnement virtuel activé, ouvrir deux terminaux.
+
+Dans le premier, démarrer l’API :
+
+```powershell
+python -m uvicorn api.main:app --reload
+```
+
+Dans le second, démarrer Streamlit :
+
+```powershell
+python -m streamlit run front/app.py
+```
+
+Ouvrir http://localhost:8501, puis se connecter avec un compte de recette (donné dans l'énoncé).
+
+Le menu latéral donne accès aux stations, aux incidents et aux indicateurs.
+Les deux rôles peuvent consulter les données. Seul le rôle exploitant dispose du formulaire de changement de statut des incidents.
+
+Pour arrêter chaque serveur, utiliser Ctrl+C dans son terminal.
 
 ## Vérifier la connexion PostgreSQL
 
@@ -293,6 +315,28 @@ Le tag `v0.0.3` identifie la fiabilisation et l’import des données.
 Les fichiers `.env`, les environnements virtuels et les sauvegardes
 sont exclus du dépôt.
 
+## Choix écoresponsables
+
+### Pagination côté serveur
+
+Les listes sont paginées dans PostgreSQL avec offset et limit. L’API renvoie 20 résultats par défaut et accepte au maximum 100 résultats par page, afin de limiter les données transférées et affichées.
+
+### Chargement à la demande
+
+L’interface ne comporte aucun rafraîchissement automatique. Les filtres sont regroupés dans des formulaires : les changements sont appliqués après validation par l’utilisateur.
+
+### Mise en cache des communes
+
+La liste des communes des stations est conservée en cache pendant une heure avec st.cache_data. Cela évite de relire le référentiel à chaque affichage.
+
+### Agrégations dans PostgreSQL
+
+Les indicateurs sont calculés avec des agrégations SQL. L’interface reçoit les résultats des calculs sans charger tous les trajets ou incidents pour les recalculer en Python.
+
+### Restitution tabulaire
+
+L’interface utilise des tableaux et des valeurs clés, conformément au périmètre demandé, sans bibliothèque de graphiques supplémentaire.
+
 ## Difficultés rencontrées et solutions
 
 ### Git non reconnu dans le terminal VS Code
@@ -338,6 +382,16 @@ Les droits `SELECT`, `INSERT` et `UPDATE` ont ensuite été vérifiés
 avec `has_table_privilege` : ils sont accordés sur les quatre tables.
 
 Pour une nouvelle installation, exécuter directement `schema.sql` avec le rôle `veloville`.
+
+### Incident modifié pendant les essais manuels
+
+Un incident importé (I2026-0065) a été passé au statut resolu pendant les essais de l’interface. Trois tests ont alors échoué, car les comptages par statut et le délai moyen ne correspondaient plus aux données initiales.
+
+La ligne a été comparée au CSV source, puis restaurée en base : statut ouvert et date de résolution à NULL.
+
+Après correction, les 169 tests réussissent à nouveau, avec 95 % de couverture des services.
+
+Pour les prochains essais de modification, utiliser un incident temporaire, vérifier son identifiant avant validation, puis le supprimer après l’essai.
 
 ## Étapes restantes
 
