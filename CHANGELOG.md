@@ -3,6 +3,11 @@
 Une section par version, avec les changements regroupés en
 « Ajouté », « Modifié », « Corrigé ».
 
+## [Non livré]
+
+### Ajouté
+- Matrice des droits par route pour les accès anonymes, exploitant et direction.
+
 ## [0.0.6] - 2026-10-15
 
 ### Ajouté
