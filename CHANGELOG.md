@@ -3,7 +3,7 @@
 Une section par version, avec les changements regroupés en
 « Ajouté », « Modifié », « Corrigé ».
 
-## [Non livré]
+## [0.0.8] - 2026-10-15
 
 ### Ajouté
 - Trois tests unitaires des réponses des indicateurs avec résultats SQL simulés.
