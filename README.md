@@ -30,7 +30,8 @@ La préparation de l’environnement est réalisée :
 Les trois indicateurs sont développés et vérifiés par des tests d’intégration :
 activité par jour, classement des stations actives et incidents par statut avec délai moyen de résolution.
 
-Les routes API, l’authentification et l’interface restent à développer. Les vérifications manuelles des contraintes SQL sont documentées dans docs/schema-donnees.md.
+Les routes API, l’authentification JWT, les contrôles de rôles et l’interface Streamlit sont développés. 
+Les vérifications manuelles des contraintes SQL sont documentées dans docs/schema-donnees.md.
 
 ## Technologies et prérequis
 
@@ -94,6 +95,9 @@ Variables attendues :
 | `JWT_EXPIRATION_MINUTES` | Durée de validité des jetons |
 | `API_URL` | Adresse de l’API utilisée par Streamlit |
 | `API_TIMEOUT_SECONDES` | Délai maximal des appels HTTP |
+| `TEST_PASSWORD` | Mot de passe des comptes de recette utilisé par les tests |
+
+Pour exécuter les tests de connexion, renseigner TEST_PASSWORD dans .env avec le mot de passe des comptes de recette fourni dans l’énoncé.
 
 Générer le secret JWT :
 
@@ -234,7 +238,7 @@ Résultat obtenu pendant la préparation :
 ```
 
 Ce résultat concerne uniquement le test de connexion.
-Les tests de l’API restent à développer.
+
 
 ## Tester les fonctions de fiabilisation
 
@@ -257,7 +261,7 @@ Cette commande exécute les tests et mesure la couverture. Le rapport indique é
 
 Résultat obtenu le 15/10/2026 :
 
-- 169 tests réussis : 134 tests de fiabilisation, 1 test de connexion, 7 tests des calculs d’indicateurs et 27 tests d’API.
+- 170 tests réussis : 134 tests de fiabilisation, 1 test de connexion, 7 tests des calculs d’indicateurs et 28 tests d’API.
 - Couverture globale de api/services : 95 %, supérieure au minimum demandé de 60 %.
 - 260 instructions mesurées, dont 12 non exécutées dans le service incidents.
 - Changement de statut vérifié manuellement depuis Streamlit sur un incident temporaire : `ouvert` --> `en_cours` --> `resolu`, avec date de résolution automatique.
@@ -270,15 +274,15 @@ La couverture indique les instructions exécutées pendant les tests.
 api/
   config.py            Chargement de la configuration
   database.py          Connexion et sessions SQLAlchemy
-  models.py            Modèles Station, Trajet et Incident. Utilisateur à développer
-  schemas.py           Schémas de validation à développer
-  securite.py          Sécurité à développer
-  routers/             Routes API à développer
-  services/            Fiabilisation et calcul des trois indicateurs
+  models.py            Modèles Station, Trajet, Incident et Utilisateur
+  schemas.py           Schémas de validation des entrées et sorties
+  securite.py          Authentification JWT et contrôle des rôles
+  routers/             Routes API
+  services/            Fiabilisation, consultations et indicateurs
 
 data/                  Exports CSV fournis
 docs/                  Documentation et recette
-front/                 Interface Streamlit à développer
+front/                 Interface Streamlit
 scripts/               Génération du secret, import et sauvegarde
 sql/                   Schéma et comptes PostgreSQL
 tests/
@@ -302,7 +306,7 @@ fonctionnalite/schema-donnees : schéma et audit terminés, fusionnés dans main
 
 fonctionnalite/import-donnees : fiabilisation et chargement des CSV terminés, fusionnés dans main par la pull request n°3.
 
-fonctionnalite/indicateurs : développement des trois indicateurs en cours.
+fonctionnalite/indicateurs : trois indicateurs développés et fusionnés dans main.
 
 Le tag `v0.0.0` identifie le squelette initial fourni, au commit `123bdcb`.
 
@@ -311,6 +315,12 @@ Le tag `v0.0.1` identifie l’environnement configuré et la connexion PostgreSQ
 Le tag `v0.0.2` identifie le schéma et l’audit des trois CSV.
 
 Le tag `v0.0.3` identifie la fiabilisation et l’import des données.
+
+Le tag `v0.0.4` identifie les trois indicateurs.
+
+Le tag `v0.0.5` identifie l’API sécurisée.
+
+Le tag `v0.0.6` identifie l’interface Streamlit.
 
 Les fichiers `.env`, les environnements virtuels et les sauvegardes
 sont exclus du dépôt.
@@ -389,19 +399,24 @@ Un incident importé (I2026-0065) a été passé au statut resolu pendant les es
 
 La ligne a été comparée au CSV source, puis restaurée en base : statut ouvert et date de résolution à NULL.
 
-Après correction, les 169 tests réussissent à nouveau, avec 95 % de couverture des services.
+Après correction, les 170 tests réussissent à nouveau, avec 95 % de couverture des services.
 
 Pour les prochains essais de modification, utiliser un incident temporaire, vérifier son identifiant avant validation, puis le supprimer après l’essai.
 
+## Recette fonctionnelle
+
+Le relevé initial comporte 8 cas OK et 2 cas KO.
+Les deux anomalies de messages HTTP ont été corrigées et les cas REC-06 et REC-08 rejoués avec succès.
+
+Les résultats consolidés sont de 10 cas OK.
+Les résultats détaillés, les limites de traçabilité et le procès-verbal se trouvent dans `docs/recette/resultats-recette.md`
+
 ## Étapes restantes
 
-- modèle ORM Utilisateur, API REST, authentification JWT et contrôle des rôles,
-- interface Streamlit,
 - sauvegarde et restauration,
-- tests métier, couverture et recette,
+- tests unitaires des indicateurs,
+- procédure de déploiement,
 - finalisation de la documentation et livraison.
-
-Les instructions de lancement de l’API et du front seront ajoutées après leur implémentation.
 
 ## Auteur
 
