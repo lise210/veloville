@@ -3,6 +3,26 @@
 Une section par version, avec les changements regroupés en
 « Ajouté », « Modifié », « Corrigé ».
 
+## [0.0.6] - 2026-10-15
+
+### Ajouté
+- Client HTTP centralisé avec jeton Bearer, délai maximal et messages d’erreur en français.
+- Gestion de la session Streamlit et formulaire de connexion.
+- Vérifications manuelles : connexion réussie, mauvais mot de passe et API arrêtée.
+- Identifiant, rôle et bouton de déconnexion dans la barre latérale.
+- Page Stations protégée avec tableau, filtre par commune et pagination.
+- Liste des communes mise en cache pendant une heure.
+- Messages de chargement, d’absence de résultat et d’erreur.
+- Page Incidents avec filtre par statut, pagination et tableau.
+- Formulaire de changement de statut réservé à l’exploitant.
+- Vérification manuelle sur un incident temporaire : passage de `ouvert` à `en_cours`, puis à `resolu` avec date de résolution automatique. Incident temporaire supprimé après vérification.
+- Page Indicateurs avec sélection de période et nombre de stations.
+- Trois métriques et trois tableaux.
+- Vérifications manuelles des résultats, du filtre de dates et d’une période sans trajet.
+
+### Corrigé
+- Restauration de l’état initial d’un incident modifié pendant les essais manuels. Vérification complète : 169 tests réussis, couverture des services de 95 %.
+
 ## [0.0.5] - 2026-10-15
 
 ### Ajouté
