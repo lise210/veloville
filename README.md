@@ -238,7 +238,7 @@ Résultat obtenu le 15/10/2026 :
 - 169 tests réussis : 134 tests de fiabilisation, 1 test de connexion, 7 tests des calculs d’indicateurs et 27 tests d’API.
 - Couverture globale de api/services : 95 %, supérieure au minimum demandé de 60 %.
 - 260 instructions mesurées, dont 12 non exécutées dans le service incidents.
-- Le changement de statut réussi reste à vérifier pendant la recette.
+- Changement de statut vérifié manuellement depuis Streamlit sur un incident temporaire : `ouvert` --> `en_cours` --> `resolu`, avec date de résolution automatique.
 
 La couverture indique les instructions exécutées pendant les tests.
 

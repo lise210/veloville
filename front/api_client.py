@@ -79,3 +79,8 @@ def obtenir(path: str, params: dict | None = None) -> dict:
     return appeler("GET",
         path,
         params=params)
+
+
+def modifier_statut(incident_id: str, statut: str) -> dict:
+    """Demande le changement de statut d'un incident"""
+    return appeler("PUT", f"/incidents/{incident_id}/statut", json={"statut": statut})

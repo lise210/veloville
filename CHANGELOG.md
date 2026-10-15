@@ -13,6 +13,9 @@ Une section par version, avec les changements regroupés en
 - Page Stations protégée avec tableau, filtre par commune et pagination.
 - Liste des communes mise en cache pendant une heure.
 - Messages de chargement, d’absence de résultat et d’erreur.
+- Page Incidents avec filtre par statut, pagination et tableau.
+- Formulaire de changement de statut réservé à l’exploitant.
+- Vérification manuelle sur un incident temporaire : passage de `ouvert` à `en_cours`, puis à `resolu` avec date de résolution automatique. Incident temporaire supprimé après vérification.
 
 ## [0.0.5] - 2026-10-15
 
