@@ -7,6 +7,8 @@ Une section par version, avec les changements regroupés en
 
 ### Ajouté
 - Matrice des droits par route pour les accès anonymes, exploitant et direction.
+- Relevé initial de recette : 8 cas OK et 2 cas KO.
+- Fiches ANO-001 et ANO-002 concernant les messages HTTP 403 et 404.
 
 ## [0.0.6] - 2026-10-15
 
