@@ -3,6 +3,15 @@
 Une section par version, avec les changements regroupés en
 « Ajouté », « Modifié », « Corrigé ».
 
+## [Non livré]
+
+### Ajouté
+- Trois tests unitaires des réponses des indicateurs avec résultats SQL simulés.
+- Dépendance pytest-mock pour les simulations dans les tests.
+
+### Modifié
+- Résultat global : 173 tests réussis, couverture des services de 95 %.
+
 ## [0.0.7] - 2026-10-15
 
 ### Ajouté
