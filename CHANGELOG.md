@@ -9,6 +9,9 @@ Une section par version, avec les changements regroupés en
 - Matrice des droits par route pour les accès anonymes, exploitant et direction.
 - Relevé initial de recette : 8 cas OK et 2 cas KO.
 - Fiches ANO-001 et ANO-002 concernant les messages HTTP 403 et 404.
+- ANO-001 : message 403 aligné sur le texte attendu dans REC-06.
+- ANO-002 : message 404 aligné sur le texte attendu dans REC-08.
+- Tests de non-régression vérifiés : 170 tests réussis, couverture des services de 95 %.
 
 ## [0.0.6] - 2026-10-15
 

@@ -267,7 +267,7 @@ def test_modifier_statut_direction_interdit(client, direction_token):
         headers={"Authorization": f"Bearer {direction_token}"})
 
     assert reponse.status_code == 403
-    assert reponse.json() == {"detail": "Rôle non autorisé pour cette action"}
+    assert reponse.json() == {"detail": "Acces reserve au role exploitant"}
 
 
 def test_modifier_statut_sans_token(client):
@@ -319,3 +319,12 @@ def test_indicateur_incidents_par_statut(client, exploitant_token):
             {"statut": "ouvert", "nb_incidents": 55},
             {"statut": "resolu", "nb_incidents": 76}],
         "delai_moyen_resolution_heures": 129.4}
+
+
+def test_station_introuvable(client, direction_token):
+    """Vérifie le code et le message pour une station inexistante"""
+    reponse = client.get("/stations/S999",
+        headers={"Authorization": f"Bearer {direction_token}"})
+
+    assert reponse.status_code == 404
+    assert reponse.json() == {"detail": "Station introuvable"}
