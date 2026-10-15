@@ -197,3 +197,9 @@ Résultat de référence : 173 tests réussis et 95 % de couverture des services
 Les tests d’intégration utilisent PostgreSQL. Les tests de comptage attendent
 les données initiales : toute modification manuelle doit être annulée
 avant leur exécution.
+
+## 10. Sauvegarde et restauration — non réalisées
+
+Le script de sauvegarde demandé n’est pas complété.
+La sauvegarde et la restauration n’ont pas été vérifiées.
+N'a pas été vu en formation, cette partie reste à réaliser avant l'oral final (je me renseignerai sur le sujet).

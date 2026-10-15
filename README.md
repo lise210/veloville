@@ -413,9 +413,7 @@ Les résultats détaillés, les limites de traçabilité et le procès-verbal se
 
 ## Étapes restantes
 
-- sauvegarde et restauration,
-- tests unitaires des indicateurs,
-- procédure de déploiement,
+- Compléter le script de sauvegarde demandé. La sauvegarde et la restauration n’ont pas été vérifiées. N'a pas été vu en formation, cette partie reste à réaliser avant l'oral final (je me renseignerai sur le sujet).
 - finalisation de la documentation et livraison.
 
 ## Auteur
