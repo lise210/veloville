@@ -12,6 +12,8 @@ Une section par version, avec les changements regroupés en
 - ANO-001 : message 403 aligné sur le texte attendu dans REC-06.
 - ANO-002 : message 404 aligné sur le texte attendu dans REC-08.
 - Tests de non-régression vérifiés : 170 tests réussis, couverture des services de 95 %.
+- Rejeux de REC-06 et REC-08 réussis sur babea35.
+- Anomalies ANO-001 et ANO-002 fermées après vérification.
 
 ## [0.0.6] - 2026-10-15
 

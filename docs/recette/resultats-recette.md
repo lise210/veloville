@@ -171,3 +171,19 @@ Deux anomalies ouvertes :
 - ANO-002 : message 404 différent du texte attendu dans REC-08.
 
 Aucune anomalie corrigée pour le moment.
+
+## Rejeux après corrections
+
+| Cas | Date et heure | Version | Résultat | Anomalie |
+|---|---|---|---|---|
+| REC-08 | 15/10/2026, 10h20 | babea35 | OK : S001 --> 200, S999 --> 404 avec "Station introuvable" | ANO-002 fermée |
+| REC-06 | 15/10/2026, 10h30| babea35 | OK : 403 conforme, modification 200, seconde demande 422, état initial restauré | ANO-001 fermée |
+
+## Synthèse après corrections
+
+Résultats consolidés des dix cas : 10 OK, 0 KO, 0 NT.
+Les essais antérieurs restent identifiés dans le relevé initial.
+
+Deux anomalies corrigées et rejouées avec succès :
+- ANO-001 : fermée après rejeu de REC-06.
+- ANO-002 : fermée après rejeu de REC-08.
