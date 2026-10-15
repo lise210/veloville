@@ -16,6 +16,9 @@ Une section par version, avec les changements regroupés en
 - Page Incidents avec filtre par statut, pagination et tableau.
 - Formulaire de changement de statut réservé à l’exploitant.
 - Vérification manuelle sur un incident temporaire : passage de `ouvert` à `en_cours`, puis à `resolu` avec date de résolution automatique. Incident temporaire supprimé après vérification.
+- Page Indicateurs avec sélection de période et nombre de stations.
+- Trois métriques et trois tableaux.
+- Vérifications manuelles des résultats, du filtre de dates et d’une période sans trajet.
 
 ## [0.0.5] - 2026-10-15
 
