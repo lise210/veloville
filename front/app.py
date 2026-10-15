@@ -15,6 +15,7 @@ import commun
 st.set_page_config(page_title="VéloVille", layout="wide")
 st.title("VéloVille — Plateforme de restitution")
 st.header("Connexion")
+commun.afficher_session() #fonction définie dans front/commun.py
 
 if not commun.est_connecte():
     with st.form("connexion", clear_on_submit=True):
@@ -39,6 +40,3 @@ if not commun.est_connecte():
 else:
     st.success(f"Connecté en tant que {st.session_state['username']} (rôle : {st.session_state['role']})")
     st.write("Utilisez le menu latéral pour accéder aux écrans.")
-    if st.button("Se déconnecter"):
-        commun.deconnecter()
-        st.rerun()

@@ -9,6 +9,10 @@ Une section par version, avec les changements regroupés en
 - Client HTTP centralisé avec jeton Bearer, délai maximal et messages d’erreur en français.
 - Gestion de la session Streamlit et formulaire de connexion.
 - Vérifications manuelles : connexion réussie, mauvais mot de passe et API arrêtée.
+- Identifiant, rôle et bouton de déconnexion dans la barre latérale.
+- Page Stations protégée avec tableau, filtre par commune et pagination.
+- Liste des communes mise en cache pendant une heure.
+- Messages de chargement, d’absence de résultat et d’erreur.
 
 ## [0.0.5] - 2026-10-15
 
