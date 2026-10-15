@@ -38,5 +38,5 @@ def consulter_station(
     station = db.scalar(select(Station).where(Station.station_id == station_id))
 
     if station is None:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Station inconnue")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Station introuvable")
     return station

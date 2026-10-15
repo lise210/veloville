@@ -100,6 +100,6 @@ def exiger_role(*roles_autorises: str):
         if utilisateur.role not in roles_autorises:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail="Rôle non autorisé pour cette action")
+                detail="Acces reserve au role exploitant")
         return utilisateur
     return verifier_role
