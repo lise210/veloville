@@ -43,7 +43,7 @@ def changer_statut_incident(
     """Vérifie la transition puis enregistre le nouveau statut"""
     incident = db.scalar(select(Incident).where(Incident.incident_id == incident_id))
     if incident is None:
-        raise HTTPException(status_code=404, detail="Incident inconnu")
+        raise HTTPException(status_code=404, detail="Incident introuvable")
     transition_autorisee = (incident.statut == "ouvert" and nouveau_statut in ("en_cours", "resolu")
                               ) or (incident.statut == "en_cours" and nouveau_statut == "resolu")
     if not transition_autorisee:

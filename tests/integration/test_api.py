@@ -5,6 +5,11 @@
 """
 
 import os
+from datetime import datetime, timedelta, timezone
+import jwt
+
+from api.config import JWT_SECRET, JWT_ALGORITHM
+
 
 def test_sante(client):
     """Vérifie que l'API répond correctement."""
@@ -328,3 +333,17 @@ def test_station_introuvable(client, direction_token):
 
     assert reponse.status_code == 404
     assert reponse.json() == {"detail": "Station introuvable"}
+
+
+def test_station_token_expire(client):
+    """Vérifie qu'un jeton expiré est refusé"""
+    contenu = {
+        "sub": "exploitant01",
+        "role": "exploitant",
+        "exp": datetime.now(timezone.utc) - timedelta(minutes=1)}
+    token = jwt.encode(contenu, JWT_SECRET, algorithm=JWT_ALGORITHM)
+
+    reponse = client.get("/stations/S010", headers={"Authorization": f"Bearer {token}"})
+
+    assert reponse.status_code == 401
+    assert reponse.json() == {"detail": "Token expiré"}
