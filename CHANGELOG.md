@@ -3,6 +3,12 @@
 Une section par version, avec les changements regroupés en
 « Ajouté », « Modifié », « Corrigé ».
 
+## [0.0.9] - 2026-10-15
+
+### Ajouté
+- Procédure d’installation locale, configuration PostgreSQL, import, lancement de l’API et de Streamlit, et vérifications après déploiement.
+
+
 ## [0.0.8] - 2026-10-15
 
 ### Ajouté
